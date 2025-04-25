@@ -1,13 +1,86 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${subject}">Subject</title>
+    <title th:text="${subject}">Welcome to Fabrikka</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .email-header {
+            background: linear-gradient(to right, #007bff, #6610f2);
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .email-body {
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .email-body p {
+            margin: 10px 0;
+        }
+
+        .email-footer {
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #6610f2;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #4e0db3;
+        }
+    </style>
 </head>
 <body>
-<p>Dear <span th:text="${user}">User</span>!</p>
-<p>Welcome to <strong>Resonance</strong>!</p>
-<p>Thank you for your purchase. We are thrilled to have you with us and hope you enjoy our services.</p>
-<p>If you have any questions or need assistance, feel free to reach out to us.</p>
-<p>Best regards,<br>The Resonance Team</p>
+<div class="email-container">
+    <div class="email-header">
+        <h1>Welcome to Fabrikka</h1>
+    </div>
+    <div class="email-body">
+        <p>Dear <span th:text="${user}">User</span>,</p>
+        <p>We are excited to welcome you to <strong>Fabrikka</strong>! Thank you for joining us. We are committed to providing you with the best shopping experience.</p>
+        <p>Explore our wide range of products and enjoy exclusive deals tailored just for you.</p>
+        <p>If you have any questions or need assistance, feel free to reach out to our support team.</p>
+        <a href="#" class="btn">Start Shopping</a>
+    </div>
+    <div class="email-footer">
+        <p>&copy; 2025 Fabrikka. All rights reserved.</p>
+    </div>
+</div>
 </body>
 </html>
