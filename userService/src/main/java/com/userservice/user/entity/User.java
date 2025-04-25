@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Table(name = "userDetails")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,19 +17,22 @@ import lombok.Setter;
 public class User {
 
     @Id
-    @Column(name = "user_id", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long userId ;
+    long id ;
 
-    @Column(name = "user_name")
+    @Column(nullable = false)
     String userName;
 
-    @Column(name = "user_email")
+    @Column(nullable = false,unique = true)
     String userEmail;
 
-    @Column(name = "user_phone")
-    String userPhone;
+    @Column(nullable = false)
+    String password;
 
-    @Column(name = "user_address")
-    String userAddress;
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "ID"))
+    List<Roles> roles;
 }

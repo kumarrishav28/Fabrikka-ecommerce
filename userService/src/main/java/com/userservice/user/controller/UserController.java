@@ -1,28 +1,64 @@
 package com.userservice.user.controller;
 
 import com.userservice.user.dto.UserDto;
+import com.userservice.user.entity.User;
 import com.userservice.user.service.userService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
-@RequestMapping("/user")
-@RestController
+@Controller
 public class UserController {
 
-    @Autowired
-    userService userService;
+    private final userService userService;
 
-    @PostMapping("/create")
-    ResponseEntity<String> createUser(@RequestBody UserDto user) {
-        userService.createUser(user);
-        return ResponseEntity.ok("User Created");
+    public UserController(userService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/find/{email}")
-    ResponseEntity<UserDto> findUserByEmail(@PathVariable  String email) {
-        UserDto userDto = userService.findUserByEmail(email);
-        return ResponseEntity.ok(userDto);
+    @GetMapping("index")
+    public String home (){
+        return "index";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+
+    @GetMapping("register")
+    public String showRegistrationForm(Model model) {
+        UserDto user = new UserDto();
+        model.addAttribute("user", user);
+        return "register";
+    }
+
+    @PostMapping("/register/createUser")
+    public String registerUser(@Valid @ModelAttribute("user") UserDto user,BindingResult bindingResult,Model model) {
+
+        User existingUser = userService.findUserByEmail(user.getUserEmail());
+        if (existingUser != null) {
+            bindingResult.rejectValue("userEmail", null, "There is already an account registered with the email provided");
+        }
+        userService.createUser(user);
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("user", user);
+            return "register";
+        }
+        return "redirect:/register?success";
+
+    }
+
+    @GetMapping("/users")
+    public String users(Model model) {
+        model.addAttribute("users", userService.findAllUsers());
+        return "users";
     }
 
 

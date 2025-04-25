@@ -1,12 +1,17 @@
 package com.userservice.user.service;
 
 import com.userservice.user.dto.UserDto;
+import com.userservice.user.entity.User;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface userService {
 
     public void createUser(UserDto userDto);
 
-    public UserDto findUserByEmail(String email);
+    public User findUserByEmail(String email);
+
+    List<UserDto> findAllUsers();
 }
