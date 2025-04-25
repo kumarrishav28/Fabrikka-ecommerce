@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public interface userService {
 
-    public void createUser(UserDto userDto);
+    public User createUser(UserDto userDto);
 
     public User findUserByEmail(String email);
 

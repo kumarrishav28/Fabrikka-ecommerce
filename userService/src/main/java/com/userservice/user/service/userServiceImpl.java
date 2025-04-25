@@ -27,7 +27,7 @@ public class userServiceImpl implements userService {
     }
 
     @Override
-    public void createUser(UserDto userDto) {
+    public User createUser(UserDto userDto) {
         // Convert UserDto to User entity
         User user = new User();
         user.setUserEmail(userDto.getUserEmail());
@@ -42,7 +42,7 @@ public class userServiceImpl implements userService {
         user.setRoles(Collections.singletonList(roles));
 
         // Save the user entity to the database
-        userRepository.save(user);
+        return userRepository.save(user);
 
     }
 

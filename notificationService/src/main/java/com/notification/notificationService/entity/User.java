@@ -18,18 +18,15 @@ import lombok.Setter;
 public class User {
 
     @Id
-    @Column(name = "user_id", unique = true, nullable = false)
-    long userId ;
+    long id ;
 
-    @Column(name = "user_name")
+    @Column(nullable = false)
     String userName;
-    
-    @Column(name = "user_email")
+
+    @Column(nullable = false,unique = true)
     String userEmail;
 
-    @Column(name = "user_phone")
-    String userPhone;
+    @Column(nullable = false)
+    String password;;
 
-    @Column(name = "user_address")
-    String userAddress;
 }
