@@ -19,6 +19,37 @@ spring:
             - Path=/api/notification/** # Matches requests with the path starting with /api/order/
           filters:
             - StripPrefix=2 # Removes the first two segments of the path before forwarding
+        # Route configuration for the cart-service
+        - id: cart-service # Unique identifier for the order-service route
+          uri: lb://cart-service # Load-balanced URI for the order-service
+          predicates:
+            - Path=/api/carts/** # Matches requests with the path starting with /api/order/
+          filters:
+            - StripPrefix=2 # Removes the first two segments of the path before forwarding
+
+        # Route configuration for the cart-service
+        - id: product-service # Unique identifier for the order-service route
+          uri: lb://product-service # Load-balanced URI for the order-service
+          predicates:
+            - Path=/api/products/** # Matches requests with the path starting with /api/order/
+          filters:
+            - StripPrefix=2 # Removes the first two segments of the path before forwarding
+
+        # Route configuration for the inventory-service
+        - id: inventory-service # Unique identifier for the order-service route
+          uri: lb://inventory-service # Load-balanced URI for the order-service
+          predicates:
+            - Path=/api/inventory/** # Matches requests with the path starting with /api/order/
+          filters:
+            - StripPrefix=2 # Removes the first two segments of the path before forwarding
+
+        # Route configuration for the inventory-service
+        - id: order-service # Unique identifier for the order-service route
+          uri: lb://order-service # Load-balanced URI for the order-service
+          predicates:
+            - Path=/api/orders/** # Matches requests with the path starting with /api/order/
+          filters:
+            - StripPrefix=2 # Removes the first two segments of the path before forwarding
 
 server:
   port: 8084 # Port on which the API Gateway will run
