@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: api-gateway # Name of the application (API Gateway)
+  cloud:
+    gateway:
+      routes:
+        # Route configuration for the user-service
+        - id: user-service # Unique identifier for the user-service route
+          uri: lb://user-service # Load-balanced URI for the user-service
+          predicates:
+            - Path=/api/user/** # Matches requests with the path starting with /api/user/
+          filters:
+            - StripPrefix=2 # Removes the first two segments of the path before forwarding
+
+        # Route configuration for the order-service
+        - id: notification-service # Unique identifier for the order-service route
+          uri: lb://notification-service # Load-balanced URI for the order-service
+          predicates:
+            - Path=/api/notification/** # Matches requests with the path starting with /api/order/
+          filters:
+            - StripPrefix=2 # Removes the first two segments of the path before forwarding
+
+server:
+  port: 8084 # Port on which the API Gateway will run
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/ # URL of the Eureka server for service discovery
+
+
+#  The class-level mapping (e.g., @RequestMapping("/sendEmail") in the NotificationController) is handled by the Spring Framework. When a request is routed to
+#  the notification-service by the API Gateway, Spring automatically prefixes the class-level mapping to all method-level mappings within the controller.
+
+
+#If user-service has two instances running:
+#Instance 1: http://localhost:8081
+#Instance 2: http://localhost:8082
+#  A request to lb://user-service will be routed to one of these instances based on the load balancing strategy (e.g., round-robin).
+#  This ensures high availability and efficient distribution of traffic across service instances.
