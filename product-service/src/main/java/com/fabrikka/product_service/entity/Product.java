@@ -17,6 +17,7 @@ import java.util.UUID;
 public class Product {
 
     @Id
+    @Column(name = "product_id")
     UUID productId;
 
     String name;
@@ -29,18 +30,14 @@ public class Product {
 
     Integer stock;
 
-    UUID categoryId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
-
-   @PrePersist
-   public void generateUUID(){
-       if(productId == null){
-              productId = UUID.randomUUID();
-       }
-   }
-
+    @PrePersist
+    public void generateUUID() {
+        if (productId == null) {
+            productId = UUID.randomUUID();
+        }
+    }
 }

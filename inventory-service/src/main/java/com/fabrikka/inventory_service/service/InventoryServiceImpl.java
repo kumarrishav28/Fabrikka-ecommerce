@@ -3,9 +3,13 @@ package com.fabrikka.inventory_service.service;
 import com.fabrikka.inventory_service.dto.InventoryDto;
 import com.fabrikka.inventory_service.entity.Inventory;
 import com.fabrikka.inventory_service.repository.InventoryRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@Service
+@Transactional
 public class InventoryServiceImpl implements InventoryService {
 
     final InventoryRepository inventoryRepository;
