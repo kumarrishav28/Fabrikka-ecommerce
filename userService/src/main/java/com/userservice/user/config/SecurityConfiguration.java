@@ -33,11 +33,12 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests.requestMatchers("/register/**").permitAll()
-                                .requestMatchers("/index").permitAll()
-                                .requestMatchers("/admin/**").permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/login").permitAll()
                                 .requestMatchers("/users").hasRole("ADMIN")
+                                .requestMatchers("/index","/").authenticated()
                                 .anyRequest().authenticated()).formLogin(formLogin ->
-                        formLogin.loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/users").permitAll())
+                        formLogin.loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/index",true).permitAll())
         .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll());
 
         return http.build();

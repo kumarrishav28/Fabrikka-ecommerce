@@ -1,11 +1,9 @@
 package com.userservice.user.controller;
 
-import com.fabrikka.common.AddItemRequest;
-import com.fabrikka.common.CartDto;
-import com.fabrikka.common.NotificationDetailsDto;
-import com.fabrikka.common.UserDto;
+import com.fabrikka.common.*;
 import com.userservice.user.config.CartClient;
 import com.userservice.user.config.NotificationClient;
+import com.userservice.user.config.ProductClient;
 import com.userservice.user.entity.User;
 import com.userservice.user.service.userService;
 import jakarta.validation.Valid;
@@ -42,10 +40,14 @@ public class ApplicationController {
 
     private final CartClient cartClient;
 
+    private final ProductClient productClient;
+
     final NotificationClient notificationClient;
 
     @GetMapping("index")
-    public String home() {
+    public String home( Model model) {
+        List<ProductDto> products = productClient.getAllProducts().getBody();
+        model.addAttribute("products", products);
         return "index";
     }
 
@@ -54,12 +56,23 @@ public class ApplicationController {
         return "login";
     }
 
+    @GetMapping("/logout")
+    public String logout() {
+        removeCachedUser("user");
+        return "redirect:/login";
+    }
+
 
     @GetMapping("register")
     public String showRegistrationForm(Model model) {
         UserDto user = new UserDto();
         model.addAttribute("user", user);
         return "register";
+    }
+
+    @GetMapping("/")
+    public String redirectToLogin() {
+        return "redirect:/login";
     }
 
     @PostMapping("/register/createUser")

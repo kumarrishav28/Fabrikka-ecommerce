@@ -11,14 +11,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminController {
 
     private final ProductClient productClient;
 
-
-    @GetMapping
+    @GetMapping("/admin")
     public String adminDashboard() {
         return "admin-dashboard";
     }
@@ -40,14 +38,10 @@ public class AdminController {
         return "add-inventory";
     }
 
-
     @GetMapping("/products")
     public String viewProducts(Model model) {
         List<ProductDto> productDtoList = productClient.getAllProducts().getBody();
         model.addAttribute("productDtoList", productDtoList);
         return "product-list";
     }
-
-
-
 }

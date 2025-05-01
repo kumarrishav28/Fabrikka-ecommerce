@@ -46,6 +46,7 @@
         <th>Description</th>
         <th>Price</th>
         <th>Available stock</th>
+        <th>Image URL</th>
     </tr>
     </thead>
     <tbody>
@@ -54,6 +55,7 @@
         <td th:text="${product.description}"></td>
         <td th:text="${product.price}"></td>
         <td th:text="${product.inventory.availableStock}"></td>
+        <td th:text="${product.imageUrl}"></td>
     </tr>
     </tbody>
 </table>
