@@ -1,4 +1,4 @@
-package com.fabrikka.inventory_service.dto;
+package com.fabrikka.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,8 +12,6 @@ import java.util.UUID;
 @Setter
 @Getter
 public class InventoryDto {
-
-    private UUID inventoryId;
 
     private UUID productId;
 

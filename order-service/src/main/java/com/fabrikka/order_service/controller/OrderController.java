@@ -1,7 +1,8 @@
 package com.fabrikka.order_service.controller;
 
-import com.fabrikka.order_service.dto.CreateOrderRequest;
-import com.fabrikka.order_service.dto.OrderResponse;
+
+import com.fabrikka.common.CreateOrderRequest;
+import com.fabrikka.common.OrderResponse;
 import com.fabrikka.order_service.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

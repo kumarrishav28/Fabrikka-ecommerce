@@ -1,4 +1,4 @@
-package com.userservice.user.dto;
+package com.fabrikka.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

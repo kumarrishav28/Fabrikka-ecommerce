@@ -1,6 +1,7 @@
 package com.fabrikka.inventory_service.service;
 
-import com.fabrikka.inventory_service.dto.InventoryDto;
+
+import com.fabrikka.common.InventoryDto;
 import com.fabrikka.inventory_service.entity.Inventory;
 import com.fabrikka.inventory_service.repository.InventoryRepository;
 import org.springframework.stereotype.Service;
@@ -39,5 +40,13 @@ public class InventoryServiceImpl implements InventoryService {
         }
         inventory.setAvailableStock(inventory.getAvailableStock() - quantity);
         inventoryRepository.save(inventory); // Ensure this is saving an Inventory entity
+    }
+
+    @Override
+    public void createInventory(InventoryDto inventoryDto) {
+        Inventory inventory = new Inventory();
+        inventory.setProductId(inventoryDto.getProductId());
+        inventory.setAvailableStock(inventoryDto.getAvailableStock());
+        inventoryRepository.save(inventory);
     }
 }

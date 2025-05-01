@@ -1,9 +1,11 @@
-package com.fabrikka.cart_service.dto;
+package com.fabrikka.common;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class AddItemRequest {
     private Long productId;
     private Integer quantity;

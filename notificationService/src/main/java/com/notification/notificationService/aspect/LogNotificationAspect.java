@@ -1,6 +1,6 @@
 package com.notification.notificationService.aspect;
 
-import com.notification.notificationService.dto.NotificationDetailsDto;
+import com.fabrikka.common.NotificationDetailsDto;
 import com.notification.notificationService.entity.NotificationLog;
 import com.notification.notificationService.repository.NotificationLogRepository;
 import org.aspectj.lang.ProceedingJoinPoint;

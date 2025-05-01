@@ -1,11 +1,10 @@
 package com.userservice.user.service;
 
-import com.userservice.user.dto.UserDto;
+import com.fabrikka.common.UserDto;
 import com.userservice.user.entity.Roles;
 import com.userservice.user.entity.User;
 import com.userservice.user.repository.roleRepository;
 import com.userservice.user.repository.userRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

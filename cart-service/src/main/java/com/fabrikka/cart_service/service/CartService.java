@@ -4,6 +4,8 @@ import com.fabrikka.cart_service.entity.Cart;
 import com.fabrikka.cart_service.entity.CartItem;
 import com.fabrikka.cart_service.repository.CartItemRepository;
 import com.fabrikka.cart_service.repository.CartRepository;
+import com.fabrikka.common.CartDto;
+import com.fabrikka.common.CartItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,19 +19,21 @@ public class CartService {
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final CartMapper cartMapper;
 
-    public Cart createCart(Long userId) {
+    public CartDto createCart(Long userId) {
         Cart cart = Cart.builder().userId(userId).build();
-        return cartRepository.save(cart);
+        Cart savedCart = cartRepository.save(cart);
+        return cartMapper.toDto(savedCart);
     }
 
-    public Optional<Cart> getCartByUserId(Long userId) {
-        return cartRepository.findByUserId(userId);
+    public Optional<CartDto> getCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId).map(cartMapper::toDto);
     }
 
-    public Cart addItemToCart(Long userId, Long productId, Integer quantity) {
+    public CartDto addItemToCart(Long userId, Long productId, Integer quantity) {
         Cart cart = cartRepository.findByUserId(userId)
-                .orElseGet(() -> createCart(userId));
+                .orElseGet(() -> cartMapper.toEntity(createCart(userId)));
 
         CartItem item = CartItem.builder()
                 .productId(productId)
@@ -38,10 +42,11 @@ public class CartService {
                 .build();
 
         cart.getItems().add(item);
-        return cartRepository.save(cart);
+        Cart updatedCart = cartRepository.save(cart);
+        return cartMapper.toDto(updatedCart);
     }
 
-    public Cart updateItemQuantity(Long userId, Long itemId, Integer newQuantity) {
+    public CartDto updateItemQuantity(Long userId, Long itemId, Integer newQuantity) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
@@ -52,22 +57,25 @@ public class CartService {
                 .orElseThrow(() -> new RuntimeException("Item not found"));
 
         item.setQuantity(newQuantity);
-        return cartRepository.save(cart);
+        Cart updatedCart = cartRepository.save(cart);
+        return cartMapper.toDto(updatedCart);
     }
 
-    public Cart removeItemFromCart(Long userId, Long itemId) {
+    public CartDto removeItemFromCart(Long userId, Long itemId) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
         cart.getItems().removeIf(i -> i.getId().equals(itemId));
-        return cartRepository.save(cart);
+        Cart updatedCart = cartRepository.save(cart);
+        return cartMapper.toDto(updatedCart);
     }
 
-    public Cart clearCart(Long userId) {
+    public CartDto clearCart(Long userId) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
         cart.getItems().clear();
-        return cartRepository.save(cart);
+        Cart updatedCart = cartRepository.save(cart);
+        return cartMapper.toDto(updatedCart);
     }
 }

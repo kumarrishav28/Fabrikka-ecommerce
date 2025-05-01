@@ -90,34 +90,18 @@
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Featured Products</h2>
-    <div class="row">
+    <div class="row" th:each="product : ${products}">
         <div class="col-md-4">
             <div class="card product-card">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Product 1">
+                <img th:src="${product.imageUrl}" class="card-img-top" alt="Product Image">
                 <div class="card-body">
-                    <h5 class="card-title">Product 1</h5>
-                    <p class="card-text">$19.99</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card product-card">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Product 2">
-                <div class="card-body">
-                    <h5 class="card-title">Product 2</h5>
-                    <p class="card-text">$29.99</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card product-card">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Product 3">
-                <div class="card-body">
-                    <h5 class="card-title">Product 3</h5>
-                    <p class="card-text">$39.99</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
+                    <h5 class="card-title" th:text="${product.name}">Product Name</h5>
+                    <p class="card-text">$<span th:text="${product.price}">19.99</span></p>
+                    <form th:action="@{/cart/add}" method="post">
+                        <input type="hidden" name="productId" th:value="${product.id}">
+                        <input type="number" name="quantity" value="1" min="1" class="form-control mb-2">
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
                 </div>
             </div>
         </div>

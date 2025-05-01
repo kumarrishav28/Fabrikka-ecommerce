@@ -1,6 +1,6 @@
 package com.userservice.user.service;
 
-import com.userservice.user.dto.UserDto;
+import com.fabrikka.common.UserDto;
 import com.userservice.user.entity.User;
 import org.springframework.stereotype.Service;
 

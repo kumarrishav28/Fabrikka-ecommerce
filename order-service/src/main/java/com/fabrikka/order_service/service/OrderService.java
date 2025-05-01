@@ -1,7 +1,7 @@
 package com.fabrikka.order_service.service;
 
-import com.fabrikka.order_service.dto.CreateOrderRequest;
-import com.fabrikka.order_service.dto.OrderResponse;
+import com.fabrikka.common.CreateOrderRequest;
+import com.fabrikka.common.OrderResponse;
 import com.fabrikka.order_service.entity.Order;
 import com.fabrikka.order_service.entity.OrderItem;
 import com.fabrikka.order_service.repository.OrderRepository;

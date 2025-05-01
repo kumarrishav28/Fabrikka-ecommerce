@@ -1,7 +1,7 @@
 package com.fabrikka.product_service.controller;
 
-import com.fabrikka.product_service.dto.CategoryDto;
-import com.fabrikka.product_service.dto.ProductDto;
+import com.fabrikka.common.CategoryDto;
+import com.fabrikka.common.ProductDto;
 import com.fabrikka.product_service.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

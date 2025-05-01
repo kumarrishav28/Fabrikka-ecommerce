@@ -1,4 +1,4 @@
-package com.notification.notificationService.dto;
+package com.fabrikka.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

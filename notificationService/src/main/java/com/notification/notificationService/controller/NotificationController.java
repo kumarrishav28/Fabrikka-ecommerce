@@ -1,7 +1,7 @@
 package com.notification.notificationService.controller;
 
-import com.notification.notificationService.dto.NotificationDetailsDto;
-import com.notification.notificationService.dto.NotificationTempDto;
+import com.fabrikka.common.NotificationDetailsDto;
+import com.fabrikka.common.NotificationTempDto;
 import com.notification.notificationService.service.NotificationService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;

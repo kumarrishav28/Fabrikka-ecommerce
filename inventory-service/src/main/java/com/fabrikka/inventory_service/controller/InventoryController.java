@@ -1,6 +1,6 @@
 package com.fabrikka.inventory_service.controller;
 
-import com.fabrikka.inventory_service.dto.InventoryDto;
+import com.fabrikka.common.*;
 import com.fabrikka.inventory_service.service.InventoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +24,14 @@ public class InventoryController {
     }
 
     @PutMapping("/{productId}")
-    ResponseEntity<String> updateInventory(@PathVariable UUID productId,Integer quantity) {
+    ResponseEntity<String> updateInventory(@PathVariable UUID productId, @RequestParam Integer quantity) {
         inventoryService.updateInventory(productId, quantity);
         return ResponseEntity.ok("Inventory updated successfully");
+    }
+
+    @PostMapping("/add")
+    ResponseEntity<String> addInventory(@RequestBody InventoryDto inventoryDto) {
+        inventoryService.createInventory(inventoryDto);
+        return ResponseEntity.ok("Inventory created successfully");
     }
 }

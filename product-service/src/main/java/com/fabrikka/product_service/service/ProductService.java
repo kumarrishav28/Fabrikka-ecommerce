@@ -1,7 +1,7 @@
 package com.fabrikka.product_service.service;
 
-import com.fabrikka.product_service.dto.CategoryDto;
-import com.fabrikka.product_service.dto.ProductDto;
+import com.fabrikka.common.CategoryDto;
+import com.fabrikka.common.ProductDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

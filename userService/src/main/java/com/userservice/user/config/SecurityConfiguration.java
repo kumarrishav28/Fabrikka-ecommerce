@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests.requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/index").permitAll()
+                                .requestMatchers("/admin/**").permitAll()
                                 .requestMatchers("/users").hasRole("ADMIN")
                                 .anyRequest().authenticated()).formLogin(formLogin ->
                         formLogin.loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/users").permitAll())

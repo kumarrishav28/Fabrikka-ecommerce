@@ -1,4 +1,4 @@
-package com.notification.notificationService.dto;
+package com.fabrikka.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,11 +14,9 @@ import java.util.List;
 @Setter
 public class NotificationDetailsDto {
 
-    public List<String> toList;
+    Map<String,String> toUserDetails;
 
-    public List<String> ccList;
-
-    public String userId ;
+    Map<String,String> ccUserDetails;
 
     public String templateName;
 

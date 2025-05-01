@@ -1,4 +1,4 @@
-package com.fabrikka.order_service.dto;
+package com.fabrikka.common;
 
 import lombok.Builder;
 import lombok.Data;

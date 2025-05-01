@@ -1,4 +1,4 @@
-package com.fabrikka.product_service.dto;
+package com.fabrikka.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class ProductDto {
 
     String imageUrl;
 
-    Integer stock;
-
     CategoryDto category;
+
+    InventoryDto inventory;
 }
