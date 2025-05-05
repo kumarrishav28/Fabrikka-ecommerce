@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class CartService {
         return cartRepository.findByUserId(userId).map(cartMapper::toDto);
     }
 
-    public CartDto addItemToCart(Long userId, Long productId, Integer quantity) {
+    public CartDto addItemToCart(Long userId, UUID productId, Integer quantity) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseGet(() -> cartMapper.toEntity(createCart(userId)));
 

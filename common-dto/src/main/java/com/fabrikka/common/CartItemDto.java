@@ -2,9 +2,11 @@ package com.fabrikka.common;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class CartItemDto {
-    private Long id;
-    private Long productId;
+    private UUID id;
+    private UUID productId;
     private int quantity;
 }

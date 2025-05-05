@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,4 +25,6 @@ public class ProductDto {
     CategoryDto category;
 
     InventoryDto inventory;
+
+    UUID productId;
 }

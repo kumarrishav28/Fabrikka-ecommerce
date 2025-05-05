@@ -11,11 +11,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
+
+    public static Map<String, Object> userCache = new ConcurrentHashMap<>();
 
     private final userRepository userRepository;
 
@@ -28,6 +32,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         Optional<User> user = userRepository.findByUserEmail(userEmail);
 
         if (user.isPresent()) {
+            // Cache the user details
+            userCache.put("user", user.get());
             return new org.springframework.security.core.userdetails.User(user.get().getUserEmail(),
                     user.get().getPassword(),
                     mapRolesToAuthorities(user.get().getRoles()));

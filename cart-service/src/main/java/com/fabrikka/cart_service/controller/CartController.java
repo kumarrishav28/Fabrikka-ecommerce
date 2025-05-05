@@ -2,11 +2,14 @@ package com.fabrikka.cart_service.controller;
 
 
 import com.fabrikka.cart_service.service.CartService;
+import com.fabrikka.common.AddItemRequest;
 import com.fabrikka.common.CartDto;
 import com.fabrikka.common.UpdateItemRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/carts")
@@ -16,7 +19,7 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping("/{userId}/add")
-    public ResponseEntity<CartDto> addItem(@PathVariable Long userId, @RequestBody com.fabrikka.common.AddItemRequest request) {
+    public ResponseEntity<CartDto> addItem(@PathVariable Long userId, @RequestBody AddItemRequest request) {
         CartDto updatedCart = cartService.addItemToCart(userId, request.getProductId(), request.getQuantity());
         return ResponseEntity.ok(updatedCart);
     }

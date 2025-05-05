@@ -3,6 +3,8 @@ package com.fabrikka.cart_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -11,13 +13,20 @@ import lombok.*;
 public class CartItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
-    private Long productId;
+    private UUID productId;
     private Integer quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
+    @ToString.Exclude
     private Cart cart;
+
+    @PrePersist
+    private void generateUUID(){
+        if(id == null){
+            id = UUID.randomUUID();
+        }
+    }
 }

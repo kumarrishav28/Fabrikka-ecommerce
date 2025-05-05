@@ -58,7 +58,8 @@ public class ProductServiceImpl implements ProductService {
                             product.getPrice(),
                             product.getImageUrl(),
                             new CategoryDto(product.getCategory().getName()),
-                            inventory
+                            inventory,
+                            product.getProductId()
                     );
                 })
                 .collect(Collectors.toList());
@@ -74,7 +75,8 @@ public class ProductServiceImpl implements ProductService {
                 product.getPrice(),
                 product.getImageUrl(),
                 new CategoryDto(product.getCategory().getName()),
-                inventory
+                inventory,
+                product.getProductId()
         );
     }
 

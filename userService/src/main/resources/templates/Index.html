@@ -104,7 +104,8 @@
                     <h5 class="card-title" th:text="${product.name}">Product Name</h5>
                     <p class="card-text">$<span th:text="${product.price}">19.99</span></p>
                     <form th:action="@{/cart/add}" method="post">
-                        <input type="number" name="quantity" value="1" min="1" class="form-control mb-2">
+                        <input type="hidden" name="productId" th:value="${product.productId}">
+                        <input type="number" name="quantity" min="1" value="1" required>
                         <button type="submit" class="btn btn-primary">Add to Cart</button>
                     </form>
                 </div>

@@ -6,6 +6,8 @@ import com.fabrikka.common.CartDto;
 import com.fabrikka.common.CartItemDto;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -15,8 +17,30 @@ public class CartMapper {
         CartDto cartDto = new CartDto();
         cartDto.setId(cart.getId());
         cartDto.setUserId(cart.getUserId());
-        cartDto.setItems(cart.getItems().stream().map(this::toItemDto).collect(Collectors.toList()));
+        cartDto.setItems(mapToItemDtoList(cart.getItems()));
         return cartDto;
+    }
+
+    public Cart toEntity(CartDto cartDto) {
+        Cart cart = new Cart();
+        cart.setId(cartDto.getId());
+        cart.setUserId(cartDto.getUserId());
+        cart.setItems(mapToItemEntityList(cartDto.getItems()));
+        return cart;
+    }
+
+    private List<CartItemDto> mapToItemDtoList(List<CartItem> items) {
+        if (items == null || items.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return items.stream().map(this::toItemDto).collect(Collectors.toList());
+    }
+
+    private List<CartItem> mapToItemEntityList(List<CartItemDto> itemDtos) {
+        if (itemDtos == null || itemDtos.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return itemDtos.stream().map(this::toItemEntity).collect(Collectors.toList());
     }
 
     private CartItemDto toItemDto(CartItem item) {
@@ -25,14 +49,6 @@ public class CartMapper {
         itemDto.setProductId(item.getProductId());
         itemDto.setQuantity(item.getQuantity());
         return itemDto;
-    }
-
-    public Cart toEntity(CartDto cartDto) {
-        Cart cart = new Cart();
-        cart.setId(cartDto.getId());
-        cart.setUserId(cartDto.getUserId());
-        cart.setItems(cartDto.getItems().stream().map(this::toItemEntity).collect(Collectors.toList()));
-        return cart;
     }
 
     private CartItem toItemEntity(CartItemDto itemDto) {
