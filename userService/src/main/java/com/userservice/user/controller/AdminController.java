@@ -52,15 +52,19 @@ public class AdminController {
 
     @PostMapping("/add-inventory")
     public String addInventory(@ModelAttribute InventoryDto inventoryDto, RedirectAttributes redirectAttributes) {
-        inventoryClient.addInventory(inventoryDto);
+        inventoryClient.updateInventory(inventoryDto.getProductId(), inventoryDto.getAvailableStock());
         redirectAttributes.addFlashAttribute("successMessage", "Product has been added successfully!");
         return "redirect:/admin";
     }
 
     @GetMapping("/inventory")
-    public String viewInventory(@RequestParam("productId") UUID productId , Model model) {
-        InventoryDto inventory = inventoryClient.getInventory(productId).getBody();
-        model.addAttribute("inventory", inventory);
+    public String viewInventory(@RequestParam(value = "productId",required = false) String productId , Model model) {
+        if (productId != null && !productId.isEmpty()) {
+            InventoryDto inventory = inventoryClient.getInventory(UUID.fromString(productId)).getBody();
+            model.addAttribute("inventory", inventory);
+        } else {
+            model.addAttribute("inventory", null);
+        }
         return "inventory";
     }
 }
