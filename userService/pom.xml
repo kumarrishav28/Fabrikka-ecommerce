@@ -11,7 +11,7 @@
 	<groupId>com.userservice</groupId>
 	<artifactId>userService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>user</name>
+	<name>userService</name>
 	<description>userService</description>
 	<url/>
 	<licenses>

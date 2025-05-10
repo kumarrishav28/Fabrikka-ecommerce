@@ -62,11 +62,17 @@ public class CartService {
         return cartMapper.toDto(updatedCart);
     }
 
-    public CartDto removeItemFromCart(Long userId, Long itemId) {
+    public CartDto removeItemFromCart(Long userId, UUID itemId) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
-        cart.getItems().removeIf(i -> i.getId().equals(itemId));
+        CartItem cartItemToRemove = cart.getItems()
+                .stream()
+                .filter(i -> i.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Item not found"));
+
+        cart.getItems().remove(cartItemToRemove);
         Cart updatedCart = cartRepository.save(cart);
         return cartMapper.toDto(updatedCart);
     }

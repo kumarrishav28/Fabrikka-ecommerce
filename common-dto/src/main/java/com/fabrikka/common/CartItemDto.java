@@ -9,4 +9,6 @@ public class CartItemDto {
     private UUID id;
     private UUID productId;
     private int quantity;
+
+    private ProductDto product;
 }

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Inventory Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .details {
+            margin-top: 20px;
+        }
+        .details label {
+            font-weight: bold;
+        }
+        .details div {
+            margin-bottom: 10px;
+        }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Inventory Details</h1>
+    <form method="get" th:action="@{inventory}">
+        <label for="productId">Enter Product ID:</label>
+        <input type="text" id="productId" name="productId" required>
+        <button type="submit">Search</button>
+    </form>
+    <div class="details" th:if="${inventory != null}">
+        <div>
+            <label>Product ID:</label>
+            <span th:text="${inventory.productId}">Product ID</span>
+        </div>
+        <div>
+            <label>Available Stock:</label>
+            <span th:text="${inventory.availableStock}">Available Stock</span>
+        </div>
+    </div>
+    <a href="/admin" class="back-link">Back to Admin Dashboard</a>
+</div>
+</body>
+</html>

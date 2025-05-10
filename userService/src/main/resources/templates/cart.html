@@ -15,7 +15,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" th:href="@{/register}">Register</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/login}">Login</a></li>
                 <li class="nav-item"><a class="nav-link active" th:href="@{/cart}">Cart</a></li>
             </ul>
@@ -30,12 +29,12 @@
             <div class="card mb-3 cart-item">
                 <div class="row g-0">
                     <div class="col-md-2">
-                        <img th:src="${item.imageUrl}" class="img-fluid rounded-start" alt="Product Image">
+                        <img th:src="${item.product.imageUrl}" class="img-fluid rounded-start" alt="Product Image">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h5 class="card-title" th:text="${item.productName}">Product Name</h5>
-                            <p class="card-text">$<span th:text="${item.price}">19.99</span></p>
+                            <h5 class="card-title" th:text="${item.product.name}">Product Name</h5>
+                            <p class="card-text">$<span th:text="${item.product.price}">19.99</span></p>
                             <p class="card-text">Quantity: <span th:text="${item.quantity}">1</span></p>
                         </div>
                     </div>
@@ -50,7 +49,9 @@
         </div>
     </div>
     <div class="text-center mt-4" th:if="${cart.items != null && !cart.items.isEmpty()}">
-        <button class="btn btn-primary btn-lg">Proceed to Checkout</button>
+        <form th:action="@{/order}" method="post">
+            <button type="submit" class="btn btn-primary btn-lg">Proceed to Checkout</button>
+        </form>
     </div>
     <div class="text-center mt-4" th:if="${cart.items == null || cart.items.isEmpty()}">
         <p>Your cart is empty.</p>

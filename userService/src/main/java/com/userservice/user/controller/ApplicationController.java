@@ -3,6 +3,7 @@ package com.userservice.user.controller;
 import com.fabrikka.common.*;
 import com.userservice.user.config.CartClient;
 import com.userservice.user.config.NotificationClient;
+import com.userservice.user.config.OrderClient;
 import com.userservice.user.config.ProductClient;
 import com.userservice.user.entity.User;
 import com.userservice.user.service.userService;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.userservice.user.security.CustomUserDetailsService.userCache;
 
@@ -33,6 +35,7 @@ public class ApplicationController {
     private final CartClient cartClient;
     private final ProductClient productClient;
     private final NotificationClient notificationClient;
+    private final OrderClient orderClient;
 
     @GetMapping("index")
     public String home(Model model) {
@@ -72,12 +75,13 @@ public class ApplicationController {
         }
         User newUser = userService.createUser(user);
 
-        CompletableFuture.runAsync(() -> sendEmail(List.of(newUser), List.of()));
+        CompletableFuture.runAsync(() -> sendEmail(List.of(newUser), List.of(),"welcome"));
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", user);
             return "register";
         }
+
         return "redirect:/index";
     }
 
@@ -91,15 +95,34 @@ public class ApplicationController {
     public String cart(Model model) {
         User cachedUser = (User) getCachedUser("user");
         Long userId = cachedUser != null ? cachedUser.getId() : null;
-        ResponseEntity<CartDto> response = cartClient.getCart(userId);
 
-        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-            model.addAttribute("cart", response.getBody());
-        } else {
+        try {
+            CartDto cartDto = fetchCart(userId);
+            populateCartItemsWithProductDetails(cartDto);
+            logger.warn("CartDto: {}", cartDto);
+            model.addAttribute("cart", cartDto);
+
+        } catch (Exception e) {
             model.addAttribute("cart", new CartDto());
         }
 
         return "cart";
+    }
+
+    private CartDto fetchCart(Long userId) {
+        ResponseEntity<CartDto> response = cartClient.getCart(userId);
+        if (response != null && response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+            return response.getBody();
+        }
+        return new CartDto();
+    }
+
+    private void populateCartItemsWithProductDetails(CartDto cartDto) {
+        for (CartItemDto itemDto : cartDto.getItems()) {
+            ResponseEntity<ProductDto> productResponse = productClient.getProductById(itemDto.getProductId());
+            logger.warn("ProductDto: {}", productResponse.getBody());
+            itemDto.setProduct(productResponse.getBody());
+        }
     }
 
     @PostMapping("/cart/add")
@@ -112,17 +135,17 @@ public class ApplicationController {
     }
 
     @PostMapping("/cart/remove")
-    public String removeFromCart(@ModelAttribute("itemId") Long itemId) {
+    public String removeFromCart(@ModelAttribute("itemId") UUID itemId) {
         User cachedUser = (User) getCachedUser("user");
         Long userId = cachedUser != null ? cachedUser.getId() : null;
         cartClient.removeItemFromCart(userId, itemId);
         return "redirect:/cart";
     }
 
-    private void sendEmail(List<User> toUsers, List<User> ccUsers) {
+    private void sendEmail(List<User> toUsers, List<User> ccUsers , String templateName) {
         NotificationDetailsDto notification = new NotificationDetailsDto();
         try {
-            notification.setTemplateName("welcome");
+            notification.setTemplateName(templateName);
             notification.setToUserDetails(createReceiversMap(toUsers));
             notification.setCcUserDetails(createReceiversMap(ccUsers));
             ResponseEntity<String> message = notificationClient.sendMail(notification);
@@ -130,6 +153,35 @@ public class ApplicationController {
         } catch (Exception e) {
             logger.warn("Error occurred while sending email: {}", e.getMessage());
         }
+    }
+
+    @GetMapping("order")
+    public String showOrderPage() {
+        return "order";
+    }
+
+    @PostMapping("/order")
+    public String placeOrder() {
+        User user = (User)getCachedUser("user");
+        ResponseEntity<CartDto> cartDtos = cartClient.getCart(user.getId());
+        populateCartItemsWithProductDetails(cartDtos.getBody());
+        List<CartItemDto> items = cartDtos.getBody().getItems();
+        CreateOrderRequest orderItem = new CreateOrderRequest();
+        List<CreateOrderRequest.OrderItemRequest> orderItemRequestList = new ArrayList<>();
+        orderItem.setUserId(user.getId());
+        for (CartItemDto item : items) {
+            orderItem.setUserId(user.getId());
+            CreateOrderRequest.OrderItemRequest orderItemRequest = new CreateOrderRequest.OrderItemRequest();
+            orderItemRequest.setProductId(item.getProductId());
+            orderItemRequest.setQuantity(item.getQuantity());
+            orderItemRequest.setPrice(item.getProduct().getPrice().doubleValue());
+            orderItemRequestList.add(orderItemRequest);
+        }
+        orderItem.setItems(orderItemRequestList);
+
+        ResponseEntity<OrderResponse> orderResponse = orderClient.createOrder(orderItem);
+
+        return "redirect:/order";
     }
 
     private Map<String, String> createReceiversMap(List<User> users) {

@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -20,7 +21,7 @@ public class OrderResponse {
     @Data
     @Builder
     public static class OrderItemResponse {
-        private Long productId;
+        private UUID productId;
         private Integer quantity;
         private Double price;
     }
