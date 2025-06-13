@@ -139,6 +139,7 @@ public class ApplicationController {
         User cachedUser = (User) getCachedUser("user");
         Long userId = cachedUser != null ? cachedUser.getId() : null;
         cartClient.removeItemFromCart(userId, itemId);
+        orderClient.removeOrder(userId);
         return "redirect:/cart";
     }
 

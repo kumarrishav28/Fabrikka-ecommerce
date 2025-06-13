@@ -57,6 +57,11 @@ public class ProductServiceController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
+    @PostMapping("/addAll")
+    public ResponseEntity<String> saveAll(@RequestBody List<ProductDto> productDto) {
+        productService.saveAll(productDto);
+        return new ResponseEntity<>("Products added", HttpStatus.CREATED);
+    }
 
 
 }

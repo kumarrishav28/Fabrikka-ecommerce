@@ -1,0 +1,22 @@
+<!-- notificationService/src/main/resources/templates/batch_failed_template.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${subject}"></title>
+</head>
+<body>
+<h2>Batch Job Failed</h2>
+<p>
+    The batch job for file <strong th:text="${fileName}">FileName.xlsx</strong>
+    (ID: <span th:text="${fileId}">123</span>) has failed.
+</p>
+<p>
+    <strong>Error Details:</strong>
+    <span th:text="${errorMessage}">Unknown error occurred.</span>
+</p>
+<p>
+    Please check the logs or contact support for further assistance.
+</p>
+</body>
+</html>

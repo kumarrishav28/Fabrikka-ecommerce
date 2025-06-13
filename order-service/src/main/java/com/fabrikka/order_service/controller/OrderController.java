@@ -28,4 +28,10 @@ public class OrderController {
         List<OrderResponse> orders = orderService.getOrdersByUserId(userId);
         return ResponseEntity.ok(orders);
     }
+
+    @PostMapping("/remove/{userId}")
+    public ResponseEntity<String> removeOrder(@PathVariable Long userId) {
+        orderService.removeOrder(userId);
+        return ResponseEntity.ok("Order removed successfully");
+    }
 }

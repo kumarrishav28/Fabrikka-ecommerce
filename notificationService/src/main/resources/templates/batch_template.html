@@ -1,0 +1,57 @@
+<!-- batch_template.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${subject}"></title>
+    <style>
+        body {
+            background: #f4f6f8;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .card {
+            background: #fff;
+            max-width: 500px;
+            margin: 40px auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 32px 28px;
+        }
+        .header {
+            color: #2d7ff9;
+            font-size: 1.6em;
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
+        .content {
+            color: #333;
+            font-size: 1.08em;
+            margin-bottom: 24px;
+        }
+        .footer {
+            color: #888;
+            font-size: 0.95em;
+            margin-top: 32px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="header">Thank You for Your Patience</div>
+    <div class="content">
+        Your file has been successfully processed.<br>
+        If you have any questions or need further assistance, please contact our support team.
+    </div>
+    <div>
+        Best regards,<br>
+        The Support Team
+    </div>
+    <div class="footer">
+        &copy; 2025 Fabrikka. All rights reserved.
+    </div>
+</div>
+</body>
+</html>

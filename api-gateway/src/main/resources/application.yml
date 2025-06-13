@@ -51,6 +51,13 @@ spring:
           filters:
             - StripPrefix=2 # Removes the first two segments of the path before forwarding
 
+        # Route configuration for the inventory-service
+        - id: load-product-service # Unique identifier for the load-product-service route
+          uri: lb://load-product-service # Load-balanced URI for the load-product-service
+          predicates:
+            - Path=/api/productFile/** # Matches requests with the path starting with /api/productFile/
+          filters:
+            - StripPrefix=2 # Removes the first two segments of the path before forwarding
 server:
   port: 8084 # Port on which the API Gateway will run
 

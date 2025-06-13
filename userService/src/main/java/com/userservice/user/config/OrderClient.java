@@ -19,4 +19,7 @@ public interface OrderClient {
 
     @GetMapping("/orders/user/{userId}")
     public ResponseEntity<List<OrderResponse>> getUserOrders(@PathVariable Long userId);
+
+    @PostMapping("/orders/remove/{userId}")
+    public ResponseEntity<String> removeOrder(@PathVariable Long userId);
 }

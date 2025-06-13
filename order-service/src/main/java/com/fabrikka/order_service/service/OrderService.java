@@ -74,4 +74,11 @@ public class OrderService {
                         .collect(Collectors.toList()))
                 .build();
     }
+
+    public void removeOrder(Long userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+        if (orders != null && !orders.isEmpty()) {
+            orderRepository.deleteAll(orders);
+        }
+    }
 }

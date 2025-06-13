@@ -12,4 +12,6 @@ public interface NotificationService {
     public void createNotificationTemplate(NotificationTempDto notificationTempDto);
 
     public void sendNotification(NotificationDetailsDto notificationDetailsDto) throws MessagingException;
+
+    public void sendNotificationGeneric(NotificationDetailsDto notificationDetailsDto) throws MessagingException;
 }

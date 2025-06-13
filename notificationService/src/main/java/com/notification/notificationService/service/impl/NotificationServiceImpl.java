@@ -71,7 +71,6 @@ public class NotificationServiceImpl implements NotificationService {
             sendHtmlEmail(notificationDetailsDto.getToUserDetails(), notificationDetailsDto.getCcUserDetails(), notificationTemplate.getSubject(), content);
     }
 
-
     private String prepareContent(String templateName,NotificationTemplate notificationTemplate,NotificationDetailsDto notificationDetailsDto) {
         Map<String, String> placeholders = new HashMap<>();
         if (null != notificationTemplate) {
@@ -101,7 +100,7 @@ public class NotificationServiceImpl implements NotificationService {
             mailMessage.setTo(getRecipients(toUserDetails).toArray(new String[0]));
             mailMessage.setFrom(sender);
             mailMessage.setSubject(subject);
-            if (!ccUserDetails.isEmpty()) {
+            if (null != ccUserDetails && !ccUserDetails.isEmpty()) {
                 mailMessage.setCc(getCcList(ccUserDetails).toArray(new String[0]));
             }
             mailMessage.setText(content, true); // true indicates HTML content
@@ -140,4 +139,23 @@ public class NotificationServiceImpl implements NotificationService {
         }
         return cc;
     }
+
+    @Override
+    @LogNotificationAware
+    public void sendNotificationGeneric(NotificationDetailsDto notificationDetailsDto) throws MessagingException {
+        if (notificationDetailsDto != null && notificationDetailsDto.getTemplateName() != null && notificationDetailsDto.getBatchNotificationAttributes() != null) {
+            String batchContent = prepareBatchContent(notificationDetailsDto);
+            sendHtmlEmail(notificationDetailsDto.getToUserDetails(),
+                    notificationDetailsDto.getCcUserDetails(), notificationDetailsDto.getBatchNotificationAttributes().get("subject"), batchContent);
+        } else {
+            throw new IllegalArgumentException("Batch notification attributes cannot be null");
+        }
+    }
+
+    private String prepareBatchContent(NotificationDetailsDto notificationDetailsDto) {
+        return templateProcessor.processHtmlEmailTemplate(notificationDetailsDto.getTemplateName(), notificationDetailsDto.getBatchNotificationAttributes());
+    }
+
+
+
 }

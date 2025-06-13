@@ -27,4 +27,10 @@ public class NotificationController {
         notificationService.sendNotification(notificationDetailsDto);
         return ResponseEntity.ok("Notification sent successfully");
     }
+
+    @PostMapping("/sendNotificationGeneric")
+    ResponseEntity<String> sendNotificationGeneric(@RequestBody NotificationDetailsDto notificationDetailsDto) throws MessagingException {
+        notificationService.sendNotificationGeneric(notificationDetailsDto);
+        return ResponseEntity.ok("Batch notification sent successfully");
+    }
 }

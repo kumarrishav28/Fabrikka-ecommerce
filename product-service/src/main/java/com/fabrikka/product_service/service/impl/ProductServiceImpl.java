@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -106,6 +108,35 @@ public class ProductServiceImpl implements ProductService {
         return categories.stream()
                 .map(category -> new CategoryDto(category.getName()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void saveAll(List<ProductDto> productDto) {
+        // Map product name to ProductDto for quick lookup
+        Map<String, ProductDto> dtoMap = productDto.stream()
+                .collect(Collectors.toMap(ProductDto::getName, dto -> dto));
+
+        List<Product> products = productDto.stream().map(dto -> {
+            Product product = new Product();
+            product.setName(dto.getName());
+            product.setDescription(dto.getDescription());
+            product.setPrice(dto.getPrice());
+            product.setImageUrl(dto.getImageUrl());
+            Category category = new Category();
+            category.setName(dto.getCategory().getName());
+            product.setCategory(category);
+            return product;
+        }).collect(Collectors.toList());
+
+        List<Product> savedProducts = productRepository.saveAll(products);
+
+        savedProducts.forEach(product -> {
+            ProductDto dto = dtoMap.get(product.getName());
+            InventoryDto inventory = new InventoryDto();
+            inventory.setProductId(product.getProductId());
+            inventory.setAvailableStock(dto.getInventory().getAvailableStock());
+            createInventory(inventory);
+        });
     }
 
     public void createInventory(InventoryDto inventoryDto) {

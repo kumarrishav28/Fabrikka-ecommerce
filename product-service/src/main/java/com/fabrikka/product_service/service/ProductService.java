@@ -21,4 +21,6 @@ public interface ProductService {
     public void updateProduct(UUID id, ProductDto productDto);
 
     public List<CategoryDto> getAllCategories();
+
+    public void saveAll(List<ProductDto> productDto);
 }
