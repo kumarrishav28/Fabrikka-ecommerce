@@ -4,11 +4,6 @@ pipeline {
 tools {
   maven 'MAVEN'  // it should be the name of the the maven configured in jenkins 
 }
-
-environment {
-  REGISTRY = 'docker.io'
-  DOCKERHUB_NAMESPACE = ${params.DOCKERHUB_NAMESPACE}
-}
 	
   parameters {
     choice(name: 'MICROSERVICE',
@@ -25,6 +20,11 @@ environment {
     choice(name: 'SPRING_PROFILE',
            choices: ['prod', 'dev'],
            description: 'Spring Boot profile to activate')
+  }
+
+  environment {
+    REGISTRY = 'docker.io'
+    DOCKERHUB_NAMESPACE = "${params.DOCKERHUB_NAMESPACE}"
   }
 
   stages {
