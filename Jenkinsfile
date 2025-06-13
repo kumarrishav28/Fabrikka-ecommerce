@@ -4,12 +4,19 @@ pipeline {
 tools {
   maven 'MAVEN'  // it should be the name of the the maven configured in jenkins 
 }
+
+environment {
+  REGISTRY = 'docker.io'
+  DOCKERHUB_NAMESPACE = ${params.DOCKERHUB_NAMESPACE}
+}
 	
   parameters {
     choice(name: 'MICROSERVICE',
            choices: ['discovery-server','api-gateway','userService','notificationService','product-service','order-service',
 		   'cart-service','common-dto','inventory-service','loadProduct'],
            description: 'Select the microservice to build')
+
+    string(name: 'DOCKERHUB_NAMESPACE', defaultValue: '*********', description: 'DockerHub namespace')
     
     string(name: 'IMAGE_TAG',
            defaultValue: 'latest',
