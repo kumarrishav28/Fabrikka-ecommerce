@@ -1,11 +1,10 @@
 pipeline {
-  agent {
-    docker {
-      image 'maven:3.9.4-eclipse-temurin-17'
-      args '-v /var/run/docker.sock:/var/run/docker.sock' // optional: for docker build if needed
-    }
-  }
+  agent any
 
+tools {
+  maven 'MAVEN'  // it should be the name of the the maven configured in jenkins 
+}
+	
   parameters {
     choice(name: 'MICROSERVICE',
            choices: ['discovery-server','api-gateway','userService','notificationService','product-service','order-service',
