@@ -29,6 +29,8 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2024.0.1</spring-cloud.version>
+		<image.tag>latest</image.tag>
+		<spring.profiles.active>default</spring.profiles.active>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -113,6 +115,30 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.4.0</version>
+				<configuration>
+					<from>
+						<image>eclipse-temurin:17-jdk</image>
+					</from>
+					<!-- Destination image is passed via -Djib.to.image -->
+					<to>
+						<tags>
+							<tag>${image.tag}</tag> <!-- passed dynamically -->
+						</tags>
+					</to>
+					<container>
+						<ports>
+							<port>8080</port>
+						</ports>
+						<environment>
+							<SPRING_PROFILES_ACTIVE>${spring.profiles.active}</SPRING_PROFILES_ACTIVE>
+						</environment>
+					</container>
 				</configuration>
 			</plugin>
 		</plugins>
