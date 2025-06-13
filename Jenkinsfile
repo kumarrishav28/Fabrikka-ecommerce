@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'maven:3.9.4-eclipse-temurin-17'
+      args '-v /var/run/docker.sock:/var/run/docker.sock' // optional: for docker build if needed
+    }
+  }
 
   parameters {
     choice(name: 'MICROSERVICE',
