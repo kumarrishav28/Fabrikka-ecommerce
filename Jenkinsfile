@@ -3,9 +3,10 @@ pipeline {
 
   parameters {
     choice(name: 'MICROSERVICE',
-           choices: ['order-service', 'user-service', 'product-service'],
+           choices: ['discovery-server','api-gateway','userService','notificationService','product-service','order-service',
+		   'cart-service','common-dto','inventory-service','loadProduct'],
            description: 'Select the microservice to build')
-
+    
     string(name: 'IMAGE_TAG',
            defaultValue: 'latest',
            description: 'Tag for the Docker image (e.g. v1.0.0)')
