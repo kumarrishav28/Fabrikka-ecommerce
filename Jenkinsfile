@@ -20,11 +20,6 @@ tools {
            description: 'Spring Boot profile to activate')
   }
 
-  environment {
-    REGISTRY = 'docker.io'
-    DOCKERHUB_NAMESPACE = 'rishavkumarthakur' 
-  }
-
   stages {
     stage('Checkout') {
       steps {
