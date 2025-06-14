@@ -44,7 +44,7 @@ tools {
           dir("${params.MICROSERVICE}") {
             sh """
               mvn compile jib:build \
-                -Djib.to.image=${REGISTRY}/${DOCKERHUB_NAMESPACE}/${params.MICROSERVICE} \
+                -Djib.to.image=${REGISTRY}/${DOCKERHUB_NAMESPACE}/${params.MICROSERVICE}:${params.IMAGE_TAG} \
                 -Djib.to.tags=${params.IMAGE_TAG} \
                 -Djib.to.auth.username=${DOCKERHUB_USER} \
                 -Djib.to.auth.password=${DOCKERHUB_PASS} \
