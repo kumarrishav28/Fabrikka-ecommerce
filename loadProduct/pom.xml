@@ -20,7 +20,6 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2023.0.1</spring-cloud.version>
-		<image.tag>latest</image.tag>
 		<spring.profiles.active>default</spring.profiles.active>
 	</properties>
 
@@ -133,12 +132,6 @@
 					<from>
 						<image>eclipse-temurin:17-jdk</image>
 					</from>
-					<!-- Destination image is passed via -Djib.to.image -->
-					<to>
-						<tags>
-							<tag>${image.tag}</tag> <!-- passed dynamically -->
-						</tags>
-					</to>
 					<container>
 						<ports>
 							<port>8080</port>

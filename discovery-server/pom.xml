@@ -100,7 +100,6 @@
 					<from>
 						<image>eclipse-temurin:17-jdk</image>
 					</from>
-					<!-- Destination image is passed via -Djib.to.image -->
 					<container>
 						<ports>
 							<port>8080</port>
