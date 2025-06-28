@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "product-service", url = "http://localhost:8085")
+@FeignClient(name = "product-service", url = "http://localhost:8084")
 public interface ProductClient {
 
 

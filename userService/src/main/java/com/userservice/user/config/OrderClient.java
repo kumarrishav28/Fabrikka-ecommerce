@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "order-service", url = "http://localhost:9001")
+@FeignClient(name = "order-service", url = "http://localhost:8084")
 public interface OrderClient {
 
     @PostMapping("/orders/create")

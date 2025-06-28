@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@FeignClient(name = "cart-service", url = "http://localhost:9000")
+@FeignClient(name = "cart-service", url = "http://localhost:8084")
 public interface CartClient {
 
     @PostMapping("/carts/{userId}/add")

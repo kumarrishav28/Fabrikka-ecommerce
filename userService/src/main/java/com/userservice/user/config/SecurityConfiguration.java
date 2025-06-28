@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,11 +36,15 @@ public class SecurityConfiguration {
                         authorizeRequests.requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/login").permitAll()
+                                .requestMatchers("/h2-console/**").permitAll() // Allow access to H2 console
                                 .requestMatchers("/users").hasRole("ADMIN")
                                 .requestMatchers("/index","/").authenticated()
                                 .anyRequest().authenticated()).formLogin(formLogin ->
                         formLogin.loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/index",true).permitAll())
-        .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll());
+        .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
+        ).headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+        // Allow H2 console to be accessed in a frame, it is not ideal to disable frame as it can lead to security vulnerabilities(clickjacking attacks),
+        // but it is necessary for H2 console access.
 
         return http.build();
     }

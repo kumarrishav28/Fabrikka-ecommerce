@@ -4,60 +4,63 @@ spring:
   cloud:
     gateway:
       routes:
-        # Route configuration for the user-service
-        - id: user-service # Unique identifier for the user-service route
-          uri: lb://user-service # Load-balanced URI for the user-service
+#        # Route configuration for the user-service
+#        - id: user-service # Unique identifier for the user-service route
+#          uri: lb://user-service # Load-balanced URI for the user-service
+#          predicates:
+#            - Path=/user/** # Matches requests with the path starting with /user/
+#          filters:
+#            - StripPrefix=1 # Removes the first segment of the path before forwarding to user-service
+        ## This section is commented out, but it can be uncommented to enable routing to the user-service.(user service is working as client interface)
+
+        # Route configuration for the notification-service
+        - id: notification-service # Unique identifier for the notification-service route
+          uri: lb://notification-service # Load-balanced URI for the notification-service
           predicates:
-            - Path=/api/user/** # Matches requests with the path starting with /api/user/
-          filters:
-            - StripPrefix=2 # Removes the first two segments of the path before forwarding
+            - Path=/sendEmail/** # Matches requests with the path starting with /notification/
+#          filters:
+#            - StripPrefix=1 # Removes the first segment of the path before forwarding to notification-service
+
+        # Route configuration for the cart-service
+        - id: cart-service # Unique identifier for the cart-service route
+          uri: lb://cart-service # Load-balanced URI for the cart-service
+          predicates:
+            - Path=/carts/** # Matches requests with the path starting with /carts/
+#          filters:
+#            - StripPrefix=1 # Removes the first segment of the path before forwarding to cart-service
+
+        # Route configuration for the product-service
+        - id: product-service # Unique identifier for the product-service route
+          uri: lb://product-service # Load-balanced URI for the product-service
+          predicates:
+            - Path=/products/** # Matches requests with the path starting with /products/
+#          filters:
+#            - StripPrefix=1 # Removes the first segment of the path before forwarding to product-service
+
+        # Route configuration for the inventory-service
+        - id: inventory-service # Unique identifier for the inventory-service route
+          uri: lb://inventory-service # Load-balanced URI for the inventory-service
+          predicates:
+            - Path=/inventory/** # Matches requests with the path starting with /inventory/
+#          filters:
+#            - StripPrefix=1 # Removes the first segment of the path before forwarding to inventory-service
 
         # Route configuration for the order-service
-        - id: notification-service # Unique identifier for the order-service route
-          uri: lb://notification-service # Load-balanced URI for the order-service
-          predicates:
-            - Path=/api/notification/** # Matches requests with the path starting with /api/order/
-          filters:
-            - StripPrefix=2 # Removes the first two segments of the path before forwarding
-        # Route configuration for the cart-service
-        - id: cart-service # Unique identifier for the order-service route
-          uri: lb://cart-service # Load-balanced URI for the order-service
-          predicates:
-            - Path=/api/carts/** # Matches requests with the path starting with /api/order/
-          filters:
-            - StripPrefix=2 # Removes the first two segments of the path before forwarding
-
-        # Route configuration for the cart-service
-        - id: product-service # Unique identifier for the order-service route
-          uri: lb://product-service # Load-balanced URI for the order-service
-          predicates:
-            - Path=/api/products/** # Matches requests with the path starting with /api/order/
-          filters:
-            - StripPrefix=2 # Removes the first two segments of the path before forwarding
-
-        # Route configuration for the inventory-service
-        - id: inventory-service # Unique identifier for the order-service route
-          uri: lb://inventory-service # Load-balanced URI for the order-service
-          predicates:
-            - Path=/api/inventory/** # Matches requests with the path starting with /api/order/
-          filters:
-            - StripPrefix=2 # Removes the first two segments of the path before forwarding
-
-        # Route configuration for the inventory-service
         - id: order-service # Unique identifier for the order-service route
           uri: lb://order-service # Load-balanced URI for the order-service
           predicates:
-            - Path=/api/orders/** # Matches requests with the path starting with /api/order/
-          filters:
-            - StripPrefix=2 # Removes the first two segments of the path before forwarding
+            - Path=/orders/** # Matches requests with the path starting with /orders/
+#          filters:
+#            - StripPrefix=1 # Removes the first segment of the path before forwarding to order-service
 
-        # Route configuration for the inventory-service
+        # Route configuration for the load-product-service
         - id: load-product-service # Unique identifier for the load-product-service route
           uri: lb://load-product-service # Load-balanced URI for the load-product-service
           predicates:
-            - Path=/api/productFile/** # Matches requests with the path starting with /api/productFile/
-          filters:
-            - StripPrefix=2 # Removes the first two segments of the path before forwarding
+            - Path=/productFile/** # Matches requests with the path starting with /productFile/
+#          filters:
+#            - StripPrefix=1 # Removes the first segment of the path before forwarding to load-product-service
+
 server:
   port: 8084 # Port on which the API Gateway will run
 
