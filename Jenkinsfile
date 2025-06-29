@@ -11,9 +11,9 @@ pipeline {
     choice(
       name: 'MICROSERVICE',
       choices: [
-        'discovery-server', 'api-gateway', 'userService', 'notificationService',
+        'discovery-server', 'api-gateway', 'user-service', 'notification-service',
         'product-service', 'order-service', 'cart-service', 'common-dto',
-        'inventory-service', 'loadProduct'
+        'inventory-service', 'load-product'
       ],
       description: 'Select the microservice to build'
     )
