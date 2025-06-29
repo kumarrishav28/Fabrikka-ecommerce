@@ -85,7 +85,7 @@ pipeline {
           // Build and push Docker image using Jib
           dir("${params.MICROSERVICE}") {
             sh """
-              mvn clean install -s ../settings.xml
+            echo "Building and pushing Docker image for ${params.MICROSERVICE} with tag ${params.IMAGE_TAG}"
               mvn compile jib:build -s ../settings.xml \
                 -Djib.to.image=${REGISTRY}/${DOCKERHUB_NAMESPACE}/${params.MICROSERVICE}:${params.IMAGE_TAG} \
                 -Djib.to.tags=${params.IMAGE_TAG} \
