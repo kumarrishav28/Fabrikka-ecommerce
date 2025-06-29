@@ -30,6 +30,7 @@ tools {
   stages {
     stage('Checkout') {
       steps {
+	deleteDir() // clean workspace
         checkout scm
       }
     }
