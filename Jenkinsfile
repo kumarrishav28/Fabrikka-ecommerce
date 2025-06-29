@@ -37,15 +37,10 @@ tools {
 
     stage('Build and Push Docker Image') {
       steps {
-	 withCredentials([usernamePassword(
-            credentialsId: 'github-creds',
-            usernameVariable: 'GITHUB_USERNAME',
-            passwordVariable: 'GITHUB_TOKEN'
-          ),
-         usernamePassword(
-          credentialsId: 'dockerhub-creds',
-          usernameVariable: 'DOCKERHUB_USER',
-          passwordVariable: 'DOCKERHUB_PASS')]) {
+	  withCredentials([
+            usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_TOKEN'),
+            usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')
+        ]) {
 
 	// Create temporary Maven settings.xml with GitHub token
           script {
@@ -64,7 +59,8 @@ tools {
 
           dir("${params.MICROSERVICE}") {
             sh """
-              mvn compile jib:build \
+	      mvn clean install -s ../settings.xml
+              mvn compile jib:build -s ../settings.xml \
                 -Djib.to.image=${REGISTRY}/${DOCKERHUB_NAMESPACE}/${params.MICROSERVICE}:${params.IMAGE_TAG} \
                 -Djib.to.tags=${params.IMAGE_TAG} \
                 -Djib.to.auth.username=${DOCKERHUB_USER} \
