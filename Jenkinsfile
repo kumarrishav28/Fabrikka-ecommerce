@@ -41,7 +41,7 @@ tools {
             usernameVariable: 'GITHUB_USERNAME',
             passwordVariable: 'GITHUB_TOKEN'
           ),
-        withCredentials([usernamePassword(
+         usernamePassword(
           credentialsId: 'dockerhub-creds',
           usernameVariable: 'DOCKERHUB_USER',
           passwordVariable: 'DOCKERHUB_PASS')]) {
