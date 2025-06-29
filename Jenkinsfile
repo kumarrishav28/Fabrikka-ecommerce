@@ -36,10 +36,30 @@ tools {
 
     stage('Build and Push Docker Image') {
       steps {
+	 withCredentials([usernamePassword(
+            credentialsId: 'github-creds',
+            usernameVariable: 'GITHUB_USERNAME',
+            passwordVariable: 'GITHUB_TOKEN'
+          ),
         withCredentials([usernamePassword(
           credentialsId: 'dockerhub-creds',
           usernameVariable: 'DOCKERHUB_USER',
           passwordVariable: 'DOCKERHUB_PASS')]) {
+
+	// Create temporary Maven settings.xml with GitHub token
+          script {
+            writeFile file: 'settings.xml', text: """
+              <settings>
+                <servers>
+                  <server>
+                    <id>github</id>
+                    <username>${GITHUB_USERNAME}</username>
+                    <password>${GITHUB_TOKEN}</password>
+                  </server>
+                </servers>
+              </settings>
+            """
+          }
 
           dir("${params.MICROSERVICE}") {
             sh """
