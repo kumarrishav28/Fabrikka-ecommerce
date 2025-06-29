@@ -67,7 +67,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/ # URL of the Eureka server for service discovery
+      defaultZone: http://discovery-server:8761/eureka/ # URL of the Eureka server for service discovery
 
 
 #  The class-level mapping (e.g., @RequestMapping("/sendEmail") in the NotificationController) is handled by the Spring Framework. When a request is routed to
