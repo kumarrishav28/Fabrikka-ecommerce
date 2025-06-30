@@ -3,6 +3,7 @@ package com.notification.notificationService.service.impl;
 
 import com.notification.notificationService.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.fabrikka.common.NotificationTempDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,8 +18,8 @@ public class TemplateInitializer implements org.springframework.boot.CommandLine
     public void run(String... args) {
         NotificationTempDto notificationTempDto = new NotificationTempDto();
         notificationTempDto.setTemplateName("welcome");
-        notificationTempDto.setSubject("Welcome to our service!");
-        notificationTempDto.setDynamicFields(List.of("subject", "user"));
+        notificationTempDto.setSubject("Welcome to our Fabrikka!");
+        notificationTempDto.setDynamicFields("subject,user");
         notificationService.createNotificationTemplate(notificationTempDto);
     }
 }
