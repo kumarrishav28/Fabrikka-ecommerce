@@ -3,6 +3,7 @@ package com.notification.notificationService.service.impl;
 
 import com.notification.notificationService.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.fabrikka.common.NotificationTempDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
