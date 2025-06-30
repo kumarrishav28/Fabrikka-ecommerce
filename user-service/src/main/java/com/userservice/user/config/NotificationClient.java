@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "notification-service", url = "http://localhost:8084")
+@FeignClient(name = "notification-service", url = "http://api-gateway:8084")
 public interface NotificationClient {
 
 

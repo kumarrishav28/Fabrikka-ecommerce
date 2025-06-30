@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@FeignClient(name = "inventory-service", url = "http://localhost:8084")
+@FeignClient(name = "inventory-service", url = "http://api-gateway:8084")
 public interface InventoryClient {
 
     @GetMapping("/inventory/{productId}")
