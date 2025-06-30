@@ -32,6 +32,8 @@ spring:
     console:
       enabled: true
       path: /h2-console
+      settings:
+        web-allow-others: true # Allows access to the H2 console from other machines
 
   mail:
     host: smtp.gmail.com
