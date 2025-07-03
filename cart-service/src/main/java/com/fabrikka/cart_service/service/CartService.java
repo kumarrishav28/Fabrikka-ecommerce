@@ -2,6 +2,7 @@ package com.fabrikka.cart_service.service;
 
 import com.fabrikka.cart_service.entity.Cart;
 import com.fabrikka.cart_service.entity.CartItem;
+import com.fabrikka.cart_service.exception.ResourceNotFoundException;
 import com.fabrikka.cart_service.repository.CartItemRepository;
 import com.fabrikka.cart_service.repository.CartRepository;
 import com.fabrikka.common.CartDto;
@@ -28,8 +29,10 @@ public class CartService {
         return cartMapper.toDto(savedCart);
     }
 
-    public Optional<CartDto> getCartByUserId(Long userId) {
-        return cartRepository.findByUserId(userId).map(cartMapper::toDto);
+    public CartDto getCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId)
+                .map(cartMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart", "userId", userId.toString()));
     }
 
     public CartDto addItemToCart(Long userId, UUID productId, Integer quantity) {
@@ -49,13 +52,13 @@ public class CartService {
 
     public CartDto updateItemQuantity(Long userId, Long itemId, Integer newQuantity) {
         Cart cart = cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cart", "userId", userId.toString()));
 
         CartItem item = cart.getItems()
                 .stream()
                 .filter(i -> i.getId().equals(itemId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Item not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("CartItem", "id", itemId.toString()));
 
         item.setQuantity(newQuantity);
         Cart updatedCart = cartRepository.save(cart);
@@ -64,13 +67,13 @@ public class CartService {
 
     public CartDto removeItemFromCart(Long userId, UUID itemId) {
         Cart cart = cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cart", "userId", userId.toString()));
 
         CartItem cartItemToRemove = cart.getItems()
                 .stream()
                 .filter(i -> i.getId().equals(itemId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Item not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("CartItem", "id", itemId.toString()));
 
         cart.getItems().remove(cartItemToRemove);
         Cart updatedCart = cartRepository.save(cart);
@@ -79,7 +82,7 @@ public class CartService {
 
     public CartDto clearCart(Long userId) {
         Cart cart = cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cart", "userId", userId.toString()));
 
         cart.getItems().clear();
         Cart updatedCart = cartRepository.save(cart);
