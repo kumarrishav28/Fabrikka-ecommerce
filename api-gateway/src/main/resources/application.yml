@@ -69,6 +69,30 @@ eureka:
     service-url:
       defaultZone: http://discovery-server:8761/eureka/ # URL of the Eureka server for service discovery
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # Exposes all actuator endpoints over HTTP
+  health:
+    readinessstate:
+      enabled: true # Enables readiness health check endpoint
+    livenessstate:
+      enabled: true # Enables liveness health check endpoint
+  endpoint:
+    shutdown:
+      access: unrestricted # Allows unrestricted access to the shutdown endpoint
+    health:
+      probes:
+        enabled: true # Enables health probes for Kubernetes or cloud platforms
+  info:
+    env:
+      enabled: true # Includes environment properties in the /info endpoint
+  metrics:
+    tags:
+      application: ${spring.application.name} # Adds application name as a tag to all metrics
+
+
 
 #  The class-level mapping (e.g., @RequestMapping("/sendEmail") in the NotificationController) is handled by the Spring Framework. When a request is routed to
 #  the notification-service by the API Gateway, Spring automatically prefixes the class-level mapping to all method-level mappings within the controller.

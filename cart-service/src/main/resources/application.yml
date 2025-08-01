@@ -43,3 +43,26 @@ eureka:
   instance:
     prefer-ip-address: true
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # Exposes all actuator endpoints over HTTP
+  health:
+    readinessstate:
+      enabled: true # Enables readiness health check endpoint
+    livenessstate:
+      enabled: true # Enables liveness health check endpoint
+  endpoint:
+    shutdown:
+      access: unrestricted # Allows unrestricted access to the shutdown endpoint
+    health:
+      probes:
+        enabled: true # Enables health probes for Kubernetes or cloud platforms
+  info:
+    env:
+      enabled: true # Includes environment properties in the /info endpoint
+  metrics:
+    tags:
+      application: ${spring.application.name} # Adds application name as a tag to all metrics
+
