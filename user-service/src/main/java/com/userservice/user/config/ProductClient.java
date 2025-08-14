@@ -3,11 +3,9 @@ package com.userservice.user.config;
 import com.fabrikka.common.CategoryDto;
 import com.fabrikka.common.ProductDto;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -33,4 +31,14 @@ public interface ProductClient {
 
     @GetMapping("/products/category")
     public ResponseEntity<List<CategoryDto>> getAllCategory();
+
+    @GetMapping("/products/search")
+    ResponseEntity<Page<ProductDto>> getProductsPaginated(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam(value = "categories", required = false) List<String> categories,
+            @RequestParam(value = "minPrice", required = false) Double minPrice,
+            @RequestParam(value = "maxPrice", required = false) Double maxPrice,
+            @RequestParam(value = "sort", required = false) String sort);
+
 }
