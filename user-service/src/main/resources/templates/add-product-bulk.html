@@ -1,47 +1,134 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Add product in Bulk</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Products in Bulk</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0;
+            background: linear-gradient(to right, #0e1a16, #1c2b28);
+            color: #fff;
+            overflow: hidden;
         }
+
         .container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 30px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 500px;
+            padding: 40px;
+            background: rgba(15, 23, 20, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
             text-align: center;
         }
+
+        h2 {
+            color: #4db6ac;
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
         input[type="file"] {
-            margin: 20px 0;
+            display: none; /* Hide the default input */
         }
-        button {
-            padding: 10px 20px;
-            background: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
+
+        .custom-file-upload {
+            border: 1px solid #4db6ac;
+            display: inline-block;
+            padding: 12px 20px;
             cursor: pointer;
+            background-color: #1f2d2a;
+            color: #e0e0e0;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            width: 100%;
+            box-sizing: border-box;
         }
-        button:hover {
-            background: #0056b3;
+
+        .custom-file-upload:hover {
+            background-color: #2a3f3a;
+        }
+
+        .custom-file-upload i {
+            margin-right: 10px;
+        }
+
+        #file-name {
+            margin-top: -10px; /* Pull it closer to the button */
+            margin-bottom: 10px;
+            color: #adb5bd;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        button[type="submit"] {
+            background: #4db6ac;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            color: #000;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+
+        button[type="submit"]:hover {
+            background: #3a9c94;
+        }
+
+        .back-link {
+            display: block;
+            text-decoration: none;
+            color: #e0e0e0;
+            font-size: 16px;
+            margin-top: 30px;
+            padding: 12px;
+            background-color: #1f2d2a;
+            border: 1px solid #4db6ac;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        }
+
+        .back-link:hover {
+            background-color: #4db6ac;
+            color: #000;
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h2>Upload Document</h2>
+    <h2>Upload Products in Bulk</h2>
     <form th:action="@{/add-product-bulk}" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" required />
-        <br/>
+        <label for="file-upload" class="custom-file-upload">
+            <i class="fas fa-cloud-upload-alt"></i> Choose Excel File
+        </label>
+        <input id="file-upload" type="file" name="file" required accept=".xlsx, .xls, .csv"/>
+        <span id="file-name">No file chosen</span>
         <button type="submit">Upload</button>
     </form>
+    <a th:href="@{/admin-dashboard}" class="back-link">Back to Admin Dashboard</a>
 </div>
+<script>
+    document.getElementById('file-upload').addEventListener('change', function() {
+        var fileName = this.files[0] ? this.files[0].name : 'No file chosen';
+        document.getElementById('file-name').textContent = fileName;
+    });
+</script>
 </body>
 </html>

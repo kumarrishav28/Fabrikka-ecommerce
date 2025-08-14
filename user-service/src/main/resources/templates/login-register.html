@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Login & Register</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #0e1a16, #1c2b28);
+            /* toned-down dark background */
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(15, 23, 20, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .form-container {
+            flex: 1;
+            padding: 40px;
+            backdrop-filter: blur(8px);
+        }
+
+        .form-toggle {
+            display: flex;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .toggle-btn.active {
+            font-weight: bold;
+            border-bottom: 2px solid #4db6ac;
+            /* Muted teal */
+        }
+
+        .form-wrapper {
+            display: none;
+        }
+
+        .form-wrapper:not(.hidden) {
+            display: block;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: #1f2d2a;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 15px 0;
+        }
+
+        .input-group input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            flex: 1;
+            padding: 8px;
+        }
+
+        .input-group i {
+            color: #4db6ac;
+            margin-right: 10px;
+        }
+
+        .password-toggle {
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .form-options a {
+            color: #4db6ac;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #4db6ac;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            color: #000;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #3a9c94;
+        }
+
+        .social-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .social-btn {
+            background: #1f2d2a;
+            border: 1px solid #4db6ac;
+            color: #4db6ac;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .social-btn:hover {
+            background: #4db6ac;
+            color: #000;
+        }
+
+        .feature-container {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #fff;
+            background: rgba(15, 23, 20, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 90%;
+        }
+
+        .feature-item {
+            margin-bottom: 15px;
+        }
+
+        .feature-item h3 {
+            margin: 5px 0;
+            color: #4db6ac;
+        }
+
+        .error-message {
+            color: #ff5252; /* A noticeable red color */
+            font-size: 12px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+    </style>
+
+
+</head>
+
+<body>
+<div class="container">
+    <!-- Form Container -->
+    <div class="form-container">
+        <!-- Toggle Buttons -->
+        <div class="form-toggle">
+            <button class="toggle-btn active" id="login-toggle">Login</button>
+            <button class="toggle-btn" id="register-toggle">Register</button>
+            <div class="toggle-slider"></div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="form-wrapper" id="login-form">
+            <h2>Welcome Back</h2>
+            <p>Please sign in to your account</p>
+            <!-- Display login error message from Spring Security -->
+            <div th:if="${param.error}" class="error-message" style="text-align: center; margin-bottom: 15px;">
+                Invalid username or password.
+            </div>
+            <div th:if="${param.logout}" style="text-align: center; margin-bottom: 15px; color: #4db6ac;">
+                You have been logged out.
+            </div>
+            <div th:if="${param.register_success}" style="text-align: center; margin-bottom: 15px; color: #4db6ac;">
+                Registration successful! Please sign in.
+            </div>
+            <form th:action="@{/login}" method="post">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" placeholder="Email" required name="username">
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Password" required name="password">
+                    <i class="fas fa-eye password-toggle"></i>
+                </div>
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember-me">
+                        <span class="checkmark"></span>
+                        Remember me
+                    </label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+                <button type="submit" class="submit-btn">Sign In</button>
+            </form>
+            <div class="social-login">
+                <p>Or sign in with</p>
+                <div class="social-buttons">
+                    <button class="social-btn google"><i class="fab fa-google"></i></button>
+                    <button class="social-btn facebook"><i class="fab fa-facebook-f"></i></button>
+                    <button class="social-btn twitter"><i class="fab fa-twitter"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Form -->
+        <div class="form-wrapper hidden" id="register-form">
+            <h2>Create Account</h2>
+            <p>Please fill in the information below</p>
+            <!-- Assuming the controller provides a 'userDto' object for registration -->
+            <form method="post" th:action="@{/register/createUser}" th:object="${user}">
+                <!-- Display global errors (e.g., password mismatch) -->
+                <div th:if="${#fields.hasGlobalErrors()}">
+                    <p th:each="err : ${#fields.globalErrors()}" th:text="${err}" class="error-message" style="text-align: center;"></p>
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" placeholder="First Name" required th:field="*{firstName}">
+                </div>
+                <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="error-message"></p>
+
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" placeholder="Last Name" required th:field="*{lastName}">
+                </div>
+                <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error-message"></p>
+
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" placeholder="Email" required th:field="*{userEmail}">
+                </div>
+                <p th:if="${#fields.hasErrors('userEmail')}" th:errors="*{userEmail}" class="error-message"></p>
+
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Password" required th:field="*{password}">
+                    <i class="fas fa-eye password-toggle"></i>
+                </div>
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></p>
+
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Confirm Password" required th:field="*{confirmPassword}">
+                    <i class="fas fa-eye password-toggle"></i>
+                </div>
+                <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="error-message"></p>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" required>
+                        <span class="checkmark"></span>
+                        I agree to the <a href="#">&nbsp;Terms & Conditions</a>
+                    </label>
+                </div>
+                <button type="submit" class="submit-btn">Create Account</button>
+            </form>
+            <div class="social-login">
+                <p>Or sign up with</p>
+                <div class="social-buttons">
+                    <button class="social-btn google"><i class="fab fa-google"></i></button>
+                    <button class="social-btn facebook"><i class="fab fa-facebook-f"></i></button>
+                    <button class="social-btn twitter"><i class="fab fa-twitter"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Toggle form view logic
+    document.addEventListener("DOMContentLoaded", function () {
+        const loginToggle = document.getElementById("login-toggle");
+        const registerToggle = document.getElementById("register-toggle");
+        const loginForm = document.getElementById("login-form");
+        const registerForm = document.getElementById("register-form");
+
+        loginToggle.addEventListener("click", () => {
+            loginToggle.classList.add("active");
+            registerToggle.classList.remove("active");
+            loginForm.classList.remove("hidden");
+            registerForm.classList.add("hidden");
+        });
+
+        registerToggle.addEventListener("click", () => {
+            registerToggle.classList.add("active");
+            loginToggle.classList.remove("active");
+            registerForm.classList.remove("hidden");
+            loginForm.classList.add("hidden");
+        });
+    });
+</script>
+</body>
+
+</html>

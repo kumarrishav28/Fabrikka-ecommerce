@@ -3,6 +3,7 @@ package com.fabrikka.product_service.controller;
 import com.fabrikka.common.CategoryDto;
 import com.fabrikka.common.ProductDto;
 import com.fabrikka.product_service.service.ProductService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,17 +29,17 @@ public class ProductServiceController {
 
 
     @GetMapping("/all")
-   public ResponseEntity<List<ProductDto>> getAllProducts() {
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
         List<ProductDto> products = productService.getAllProducts();
         return new ResponseEntity<>(products, HttpStatus.OK);
-   }
+    }
 
-   @GetMapping("/{id}")
-   public ResponseEntity<ProductDto> getProductById(@PathVariable UUID id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable UUID id) {
         ProductDto product = productService.getProductById(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
 
-   }
+    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable UUID id) {
@@ -61,6 +62,18 @@ public class ProductServiceController {
     public ResponseEntity<String> saveAll(@RequestBody List<ProductDto> productDto) {
         productService.saveAll(productDto);
         return new ResponseEntity<>("Products added", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/search")
+    ResponseEntity<Page<ProductDto>> getProductsPaginated(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam(value = "categories", required = false) List<String> categories,
+            @RequestParam(value = "minPrice", required = false) Double minPrice,
+            @RequestParam(value = "maxPrice", required = false) Double maxPrice,
+            @RequestParam(value = "sort", required = false) String sort){
+
+        return new ResponseEntity<>(productService.getProductsPaginated(page, size, categories, minPrice, maxPrice, sort),HttpStatus.OK);
     }
 
 

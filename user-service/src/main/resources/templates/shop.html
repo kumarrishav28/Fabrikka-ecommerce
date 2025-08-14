@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Fabrikka</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        /* General Body and Theme (Consistent with index.html) */
+        body {
+            background: linear-gradient(to right, #0e1a16, #1c2b28);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Navbar (Consistent with index.html) */
+        .navbar {
+            background-color: rgba(15, 23, 20, 0.8) !important;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+
+        .navbar-brand {
+            color: #4db6ac !important;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            color: #4db6ac !important;
+        }
+
+        /* Main Shop Layout */
+        .shop-container {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1600px;
+            margin: auto;
+        }
+
+        /* Filters Sidebar */
+        .filters-sidebar {
+            flex: 0 0 280px; /* Fixed width for the sidebar */
+            background-color: #1f2d2a;
+            padding: 2rem;
+            border-radius: 15px;
+            align-self: flex-start; /* Stick to the top */
+            position: sticky;
+            top: 100px; /* Adjust based on navbar height */
+        }
+
+        .filters-sidebar h3 {
+            color: #4db6ac;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #2a3f3a;
+            padding-bottom: 1rem;
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group h5 {
+            color: #fff;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .filter-group .form-check {
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-group .form-check-label {
+            font-size: 0.9rem;
+        }
+
+        .filter-group .form-range {
+            padding: 0;
+        }
+
+        .btn-filter {
+            width: 100%;
+            background-color: #4db6ac;
+            border-color: #4db6ac;
+            color: #000;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .price-input {
+            background-color: #0e1a16;
+            border: 1px solid #4db6ac;
+            color: #fff;
+            border-radius: 5px;
+            text-align: center;
+            padding: 0.375rem 0.5rem;
+            width: 100px;
+        }
+        .price-input::-webkit-inner-spin-button,
+        .price-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        .price-input { -moz-appearance: textfield; }
+
+
+        .btn-filter:hover {
+            background-color: #3a9c94;
+        }
+
+        /* Product Display Area */
+        .product-main {
+            flex-grow: 1;
+        }
+
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #2a3f3a;
+        }
+
+        .shop-header h2 {
+            color: #fff;
+            margin: 0;
+        }
+
+        .sort-dropdown {
+            background-color: #1f2d2a;
+            color: #e0e0e0;
+            border: 1px solid #4db6ac;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Product Card (Reused and adapted from index.html) */
+        .product-card {
+            background-color: #1f2d2a;
+            border: 1px solid #2a3f3a;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+            color: #e0e0e0;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(77, 182, 172, 0.2);
+            border-color: #4db6ac;
+        }
+
+        .product-card img {
+            height: 250px;
+            object-fit: cover;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+
+        .product-card .card-body { padding: 1.25rem; }
+        .product-card .card-title { color: #fff; font-weight: bold; }
+        .product-card .card-text { color: #4db6ac; font-size: 1.25rem; font-weight: bold; }
+        .product-card form { margin-top: 1rem; display: flex; gap: 10px; }
+        .product-card input[type="number"] { width: 60px; background-color: #0e1a16; border: 1px solid #4db6ac; color: #fff; border-radius: 5px; text-align: center; padding: 0.375rem 0.5rem; }
+        .product-card .btn-primary { flex-grow: 1; background-color: #4db6ac; border-color: #4db6ac; color: #000; font-weight: bold; }
+        .product-card .btn-primary:hover { background-color: #3a9c94; border-color: #3a9c94; }
+
+        /* Pagination */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .pagination .page-item .page-link {
+            background-color: #1f2d2a;
+            border-color: #2a3f3a;
+            color: #e0e0e0;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #4db6ac;
+            border-color: #4db6ac;
+            color: #000;
+        }
+
+        .pagination .page-item:not(.active) .page-link:hover {
+            background-color: #2a3f3a;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0e1a16;
+            color: #adb5bd;
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 5rem;
+            border-top: 1px solid #1f2d2a;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/index}">Fabrikka</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/index}">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/shop}">Shop</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/cart}">Cart</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin-dashboard}">Admin</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="shop-container">
+    <!-- Filters Sidebar -->
+    <aside class="filters-sidebar">
+        <form th:action="@{/shop}" method="get" id="filter-form">
+            <h3>Filters</h3>
+            <!-- Category Filter -->
+            <div class="filter-group">
+                <h5>Category</h5>
+                <!-- Loop through categories provided by the controller -->
+                <div class="form-check" th:each="category : ${categories}">
+                    <input class="form-check-input" type="checkbox" name="categories" th:value="${category.name}" th:id="${'cat-' + category.name}"
+                           th:checked="${currentCategories != null && #lists.contains(currentCategories, category.name)}">
+                    <label class="form-check-label" th:for="${'cat-' + category.name}" th:text="${category.name}">Category Name</label>
+                </div>
+            </div>
+            <!-- Price Range Filter -->
+            <div class="filter-group">
+                <h5>Price Range</h5>
+                <div class="d-flex align-items-center justify-content-between">
+                    <input type="number" class="price-input" name="minPrice" placeholder="Min" th:value="${param.minPrice != null ? param.minPrice[0] : ''}">
+                    <span>-</span>
+                    <input type="number" class="price-input" name="maxPrice" placeholder="Max" th:value="${param.maxPrice != null ? param.maxPrice[0] : ''}">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-filter">Apply Filters</button>
+            <a th:href="@{/shop}" class="btn btn-outline-light w-100 mt-2" style="border-color: #4db6ac; color: #4db6ac;">Clear Filters</a>
+        </form>
+    </aside>
+
+    <!-- Main Product Grid -->
+    <main class="product-main">
+        <div class="shop-header">
+            <!-- Displaying result count -->
+            <div th:if="${productPage.totalElements > 0}">
+                Showing <span th:text="${productPage.number * productPage.size + 1}">1</span>–<span th:text="${productPage.number * productPage.size + productPage.numberOfElements}">9</span>
+                of <span th:text="${productPage.totalElements}"></span> results
+            </div>
+            <!-- This select is now linked to the sidebar form and submits it on change -->
+            <select class="form-select sort-dropdown" style="width: auto;" name="sort" form="filter-form" onchange="this.form.submit()">
+                <option value="" th:selected="${param.sort == null or param.sort[0] == ''}">Sort by: Featured</option>
+                <option value="price,asc" th:selected="${param.sort != null and param.sort[0] == 'price,asc'}">Price: Low to High</option>
+                <option value="price,desc" th:selected="${param.sort != null and param.sort[0] == 'price,desc'}">Price: High to Low</option>
+                <option value="name,asc" th:selected="${param.sort != null and param.sort[0] == 'name,asc'}">Name: A-Z</option>
+            </select>
+        </div>
+
+        <div th:if="${productPage.isEmpty()}" class="text-center p-5">
+            <h3>No products found.</h3>
+        </div>
+
+        <div class="product-grid">
+            <!-- Product Card Loop -->
+            <div class="card product-card" th:each="product : ${productPage.content}">
+                <img th:src="${product.imageUrl}" class="card-img-top" alt="Product Image">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${product.name}">Product Name</h5>
+                    <p class="card-text">$<span th:text="${product.price}">19.99</span></p>
+                    <form th:action="@{/cart/add}" method="post">
+                        <input type="hidden" name="productId" th:value="${product.productId}">
+                        <input type="number" name="quantity" min="1" value="1" required>
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav class="pagination-container" aria-label="Page navigation" th:if="${productPage.totalPages > 1}">
+            <ul class="pagination">
+                <!-- Previous Button -->
+                <li class="page-item" th:classappend="${productPage.isFirst() ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{/shop(page=${productPage.number}, size=${productPage.size}, categories=${param.categories}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice}, sort=${param.sort})}">Previous</a>
+                </li>
+
+                <!-- Page Numbers -->
+                <li class="page-item" th:each="pageNumber : ${pageNumbers}" th:classappend="${pageNumber == productPage.number + 1 ? 'active' : ''}">
+                    <a class="page-link" th:href="@{/shop(page=${pageNumber}, size=${productPage.size}, categories=${param.categories}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice}, sort=${param.sort})}" th:text="${pageNumber}">1</a>
+                </li>
+
+                <!-- Next Button -->
+                <li class="page-item" th:classappend="${productPage.isLast() ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{/shop(page=${productPage.number + 2}, size=${productPage.size}, categories=${param.categories}, minPrice=${param.minPrice}, maxPrice=${param.maxPrice}, sort=${param.sort})}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </main>
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 Fabrikka. All rights reserved.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFyC8bvd+N2Y6q2htqtBoVYQvFQeJOeHl4UHEEvoEH3Sl0sibVcOQVnN2" crossorigin="anonymous"></script>
+</body>
+</html>

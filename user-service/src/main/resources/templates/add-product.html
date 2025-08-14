@@ -1,57 +1,107 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Product</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 2rem 0; /* Add padding for scrollable forms */
+            background: linear-gradient(to right, #0e1a16, #1c2b28);
+            color: #fff;
         }
         .container {
+            width: 90%;
             max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            background: rgba(15, 23, 20, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
         }
         h1 {
             text-align: center;
-            color: #333;
+            color: #4db6ac;
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 1px;
         }
         form {
             display: flex;
             flex-direction: column;
+            gap: 15px;
         }
         label {
-            margin: 10px 0 5px;
+            margin-bottom: -10px; /* Pull label closer to input */
             font-weight: bold;
+            text-align: left;
+            color: #e0e0e0;
         }
-        input {
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        button {
-            padding: 10px;
-            background-color: #007bff;
+        input[type="text"],
+        input[type="number"] {
+            background: #1f2d2a;
+            border: 1px solid #4db6ac;
+            border-radius: 5px;
+            padding: 12px;
             color: #fff;
-            border: none;
-            border-radius: 4px;
             font-size: 16px;
-            cursor: pointer;
+            outline: none;
+            transition: border-color 0.3s;
+            width: 100%;
+            box-sizing: border-box;
         }
-        button:hover {
-            background-color: #0056b3;
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #64ffda; /* Brighter teal on focus */
+        }
+        button[type="submit"] {
+            background: #4db6ac;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            color: #000;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        button[type="submit"]:hover {
+            background: #3a9c94;
         }
         .success-message {
-            color: green;
+            color: #4db6ac;
             font-weight: bold;
             margin-bottom: 15px;
+            text-align: center;
+            background-color: rgba(77, 182, 172, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #4db6ac;
+        }
+        .back-link {
+            display: block;
+            text-decoration: none;
+            color: #e0e0e0;
+            font-size: 16px;
+            margin-top: 30px;
+            padding: 12px;
+            background-color: #1f2d2a;
+            border: 1px solid #4db6ac;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+            text-align: center;
+        }
+        .back-link:hover {
+            background-color: #4db6ac;
+            color: #000;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -59,31 +109,33 @@
 <div class="container">
     <h1>Add Product</h1>
 
-    <!-- Display success message -->
     <div th:if="${successMessage}" class="success-message">
         <p th:text="${successMessage}"></p>
     </div>
 
-    <form action="/add-product" method="post">
+    <form th:action="@{/add-product}" method="post">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" placeholder="Enter product name">
+
         <label for="description">Description:</label>
         <input type="text" id="description" name="description" placeholder="Enter product description">
+
         <label for="price">Price:</label>
         <input type="number" id="price" name="price" placeholder="Enter product price">
+
         <label for="imageUrl">Image URL:</label>
         <input type="text" id="imageUrl" name="imageUrl" placeholder="Enter image URL">
 
-        <!-- InventoryDto fields -->
         <label for="availableStock">Available Stock:</label>
         <input type="number" id="availableStock" name="inventory.availableStock" placeholder="Enter available stock">
 
-        <!-- CategoryDto fields -->
         <label for="categoryName">Category Name:</label>
         <input type="text" id="categoryName" name="category.name" placeholder="Enter category name">
 
         <button type="submit">Add Product</button>
     </form>
+
+    <a th:href="@{/admin-dashboard}" class="back-link">Back to Admin Dashboard</a>
 </div>
 </body>
 </html>

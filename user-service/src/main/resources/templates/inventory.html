@@ -4,63 +4,132 @@
     <title>Inventory Details</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            display: flex; /* Use flexbox for centering */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            height: 100vh; /* Full viewport height */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            background: linear-gradient(to right, #0e1a16, #1c2b28);
+            color: #fff;
+            overflow: hidden;
         }
+
         .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px; /* A more focused width */
+            padding: 40px;
+            background: rgba(15, 23, 20, 0.7); /* Semi-transparent dark background */
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px); /* Frosted glass effect */
+            text-align: center;
         }
+
         h1 {
             text-align: center;
-            color: #333;
+            color: #4db6ac; /* Muted teal for consistency */
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 1px;
         }
-        .details {
-            margin-top: 20px;
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
         }
-        .details label {
+
+        label {
             font-weight: bold;
+            font-size: 16px;
+            color: #e0e0e0;
+            text-align: left;
         }
-        .details div {
-            margin-bottom: 10px;
+
+        input[type="text"] {
+            background: #1f2d2a;
+            border: 1px solid #4db6ac;
+            border-radius: 5px;
+            padding: 12px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
         }
+
+        input[type="text"]:focus {
+            border-color: #64ffda; /* Brighter teal on focus */
+        }
+
+        button[type="submit"] {
+            background: #4db6ac;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            color: #000;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background: #3a9c94;
+        }
+
+        .results-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #1f2d2a;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .results-container p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
         .back-link {
             display: block;
-            margin-top: 20px;
-            text-align: center;
             text-decoration: none;
-            color: #007bff;
+            color: #e0e0e0;
+            font-size: 18px;
+            margin: 30px 0 0; /* Adjusted margin */
+            padding: 15px;
+            background-color: #1f2d2a;
+            border: 1px solid #4db6ac;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
         }
+
         .back-link:hover {
-            text-decoration: underline;
+            background-color: #4db6ac;
+            color: #000;
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Inventory Details</h1>
-    <form action="/inventory" method="get">
+    <form th:action="@{/inventory}" method="get">
         <label for="productId">Enter Product ID:</label>
         <input type="text" id="productId" name="productId" required>
         <button type="submit">Search</button>
     </form>
-    <div>
-        <h2>Inventory Details</h2>
+    <div class="results-container">
         <div th:if="${inventory != null}">
             <p>Product ID: <span th:text="${inventory.productId}"></span></p>
             <p>Available Stock: <span th:text="${inventory.availableStock}"></span></p>
         </div>
         <div th:if="${inventory == null}">
-            <p>No inventory details available. Please enter a Product ID.</p>
+            <p>No inventory details found. Please search for a product.</p>
         </div>
     </div>
-    <a href="/admin" class="back-link">Back to Admin Dashboard</a>
+    <a th:href="@{/admin-dashboard}" class="back-link">Back to Admin Dashboard</a>
 </div>
 </body>
 </html>

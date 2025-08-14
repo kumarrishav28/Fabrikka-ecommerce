@@ -27,7 +27,7 @@ public class AdminController {
 
     private final LoadProductClient loadProductClient;
 
-    @GetMapping("/admin")
+    @GetMapping("/admin-dashboard")
     public String adminDashboard() {
         return "admin-dashboard";
     }
@@ -41,7 +41,7 @@ public class AdminController {
     public String addProduct(@ModelAttribute ProductDto productDto, RedirectAttributes redirectAttributes) {
         productClient.addProduct(productDto);
         redirectAttributes.addFlashAttribute("successMessage", "Product has been added successfully!");
-        return "redirect:/admin";
+        return "redirect:/admin-dashboard";
     }
 
     @GetMapping("/add-inventory")
@@ -60,7 +60,7 @@ public class AdminController {
     public String addInventory(@ModelAttribute InventoryDto inventoryDto, RedirectAttributes redirectAttributes) {
         inventoryClient.updateInventory(inventoryDto.getProductId(), inventoryDto.getAvailableStock());
         redirectAttributes.addFlashAttribute("successMessage", "Product has been added successfully!");
-        return "redirect:/admin";
+        return "redirect:/admin-dashboard";
     }
 
     @GetMapping("/inventory")
@@ -88,7 +88,7 @@ public class AdminController {
             return "redirect:/add-product-bulk";
         }
         redirectAttributes.addFlashAttribute("successMessage", "Your file is being processed. You will receive a confirmation email once the process is complete.");
-        return "redirect:/admin";
+        return "redirect:/admin-dashboard";
     }
 
     @GetMapping("/add-product-bulk")

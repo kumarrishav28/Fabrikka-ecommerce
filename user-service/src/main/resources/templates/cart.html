@@ -3,11 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Cart</title>
+    <title>Your Cart - Fabrikka</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* General Body and Theme */
+        body {
+            background: linear-gradient(to right, #0e1a16, #1c2b28);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: rgba(15, 23, 20, 0.8) !important;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        .navbar-brand {
+            color: #4db6ac !important;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            color: #4db6ac !important;
+        }
+
+        /* Main Container */
+        .cart-container {
+            max-width: 1200px;
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            color: #fff;
+            font-weight: 300;
+            letter-spacing: 1px;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #2a3f3a;
+        }
+
+        /* Cart Item Card */
+        .cart-item {
+            background-color: #1f2d2a;
+            border: 1px solid #2a3f3a;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .cart-item:hover {
+            border-color: #4db6ac;
+            box-shadow: 0 4px 15px rgba(77, 182, 172, 0.1);
+        }
+
+        .cart-item img {
+            height: 120px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .cart-item .card-body {
+            padding: 1.5rem;
+        }
+
+        .cart-item .card-title {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .cart-item .card-text {
+            color: #4db6ac;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .btn-danger {
+            background-color: #ff5252;
+            border-color: #ff5252;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .btn-danger:hover {
+            background-color: #ff1744;
+            border-color: #ff1744;
+        }
+
+        /* Cart Summary */
+        .cart-summary {
+            background-color: #1f2d2a;
+            padding: 2rem;
+            border-radius: 15px;
+            position: sticky;
+            top: 100px; /* Adjust based on navbar height */
+        }
+
+        .cart-summary h4 {
+            color: #4db6ac;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #2a3f3a;
+            padding-bottom: 1rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .total-row {
+            font-weight: bold;
+            font-size: 1.25rem;
+            border-top: 1px solid #2a3f3a;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            color: #fff;
+        }
+
+        .btn-checkout {
+            width: 100%;
+            background-color: #4db6ac;
+            border-color: #4db6ac;
+            color: #000;
+            font-weight: bold;
+            padding: 12px;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-checkout:hover {
+            background-color: #3a9c94;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0e1a16;
+            color: #adb5bd;
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 5rem;
+            border-top: 1px solid #1f2d2a;
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/index}">Fabrikka</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -15,46 +158,74 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" th:href="@{/login}">Login</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/index}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/shop}">Shop</a></li>
                 <li class="nav-item"><a class="nav-link active" th:href="@{/cart}">Cart</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin-dashboard}">Admin</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
 <div class="container cart-container">
-    <h2 class="text-center mb-4">Your Cart</h2>
-    <div class="row" th:if="${cart.items != null}">
-        <div class="col-md-12" th:each="item : ${cart.items}">
-            <div class="card mb-3 cart-item">
-                <div class="row g-0">
-                    <div class="col-md-2">
-                        <img th:src="${item.product.imageUrl}" class="img-fluid rounded-start" alt="Product Image">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${item.product.name}">Product Name</h5>
-                            <p class="card-text">$<span th:text="${item.product.price}">19.99</span></p>
-                            <p class="card-text">Quantity: <span th:text="${item.quantity}">1</span></p>
+    <h2 class="page-title">Your Shopping Cart</h2>
+
+    <!-- Empty Cart Message -->
+    <div class="text-center p-5" th:if="${cart == null || cart.items.isEmpty()}">
+        <h3>Your cart is empty.</h3>
+        <a th:href="@{/shop}" class="btn btn-checkout mt-3">Continue Shopping</a>
+    </div>
+
+    <div class="row" th:if="${cart != null && !cart.items.isEmpty()}">
+        <!-- Cart Items Column -->
+        <div class="col-lg-8">
+            <div class="d-flex flex-column gap-3">
+                <!-- Single Cart Item -->
+                <div class="card cart-item" th:each="item : ${cart.items}">
+                    <div class="row g-0">
+                        <div class="col-md-3">
+                            <img th:src="${item.product.imageUrl}" class="img-fluid" alt="Product Image">
                         </div>
-                    </div>
-                    <div class="col-md-2 d-flex align-items-center justify-content-center">
-                        <form th:action="@{/cart/remove}" method="post">
-                            <input type="hidden" name="itemId" th:value="${item.id}">
-                            <button type="submit" class="btn btn-danger">Remove</button>
-                        </form>
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${item.product.name}">Product Name</h5>
+                                <p class="card-text mb-1">$<span th:text="${#numbers.formatDecimal(item.product.price, 1, 2)}">19.99</span></p>
+                                <p class="card-text text-white-50">Quantity: <span th:text="${item.quantity}">1</span></p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-center justify-content-center">
+                            <form th:action="@{/cart/remove}" method="post">
+                                <input type="hidden" name="itemId" th:value="${item.id}">
+                                <button type="submit" class="btn btn-danger">Remove</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="text-center mt-4" th:if="${cart.items != null && !cart.items.isEmpty()}">
-        <form th:action="@{/order}" method="post">
-            <button type="submit" class="btn btn-primary btn-lg">Proceed to Checkout</button>
-        </form>
-    </div>
-    <div class="text-center mt-4" th:if="${cart.items == null || cart.items.isEmpty()}">
-        <p>Your cart is empty.</p>
+
+        <!-- Cart Summary Column -->
+        <div class="col-lg-4">
+            <div class="cart-summary" th:object="${cart}">
+                <h4>Order Summary</h4>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span th:text="'$' + ${#numbers.formatDecimal(*{totalPrice}, 1, 2)}">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span>$5.00</span> <!-- Placeholder -->
+                </div>
+                <div class="summary-row total-row">
+                    <span>Total</span>
+                    <span th:text="'$' + ${#numbers.formatDecimal(*{totalPrice} + 5.00, 1, 2)}">$0.00</span>
+                </div>
+                <form th:action="@{/order}" method="post" class="mt-4">
+                    <button type="submit" class="btn btn-checkout">Proceed to Checkout</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
